@@ -6,5 +6,5 @@
 html,
 body,
 #root {
-    @apply h-full overflow-auto;
+    @apply min-h-screen;
 }

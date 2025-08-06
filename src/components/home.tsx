@@ -14,17 +14,14 @@ function Home() {
 
     return (
         <>
-            <div className="min-h-screen bg-white">
-                <>
-                    <Header />
-                    <HeroSection />
-                    <ServicesSection />
-                    <ProductsSection />
-                    <BestSaleProduct />
-                    <LookBookSection />
-                    <NewsSection />
-                    <Footer />
-                </>
+            <div className=" bg-white">
+                <HeroSection />
+                <ServicesSection />
+                <ProductsSection />
+                <BestSaleProduct />
+                <LookBookSection />
+                <NewsSection />
+                <Footer />
             </div >
         </>
     )

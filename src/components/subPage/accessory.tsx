@@ -1,6 +1,6 @@
 import React from 'react';
 
-function accessory(props) {
+function Accessory(props) {
     return (
         <>
             <div class="flex ml-[45px] mt-[10px]">
@@ -152,4 +152,4 @@ function accessory(props) {
     );
 }
 
-export default accessory;
+export default Accessory;

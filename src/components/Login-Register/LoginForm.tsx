@@ -1,5 +1,5 @@
 
-export default function SignInForm() {
+const SignInForm = () => {
     return (
         <form className="flex flex-col items-center justify-center h-full px-[50px] text-center bg-white">
             <h1 className="text-2xl font-bold mb-4">Sign in</h1>
@@ -19,3 +19,4 @@ export default function SignInForm() {
         </form>
     );
 }
+export default SignInForm
