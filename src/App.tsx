@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
-    <Router>
+    <>
       <div>
         <Header />
         <Approutes />
@@ -22,7 +22,8 @@ function App() {
         pauseOnHover
         theme="dark"
       />
-    </Router>
+    </>
+
   );
 }
 

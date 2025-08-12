@@ -1,31 +1,16 @@
-
-import {
-    Switch,
-    Route,
-} from "react-router-dom";
-import AuthForm from '../components/Login-Register/AuthPage';
-import Accessory from '../components/subPage/accessory';
-import Home from '../components/home';
+import { Routes, Route } from "react-router-dom";
+import AuthForm from "../components/Login-Register/AuthPage";
+import Accessory from "../components/subPage/accessory";
+import Home from "../components/Section/home";
 
 function Approutes() {
     return (
-        <>
-            <Switch>
-                <Route path="/auth">
-                    <AuthForm />
-                </Route>
-                <Route path="/accessories">
-                    <Accessory />
-                </Route>
-
-                <Route path="/" exact>
-                    <Home />
-                </Route>
-                <Route path="*">
-                    404 not found
-                </Route>
-            </Switch >
-        </>
+        <Routes>
+            <Route path="/auth" element={<AuthForm />} />
+            <Route path="/accessories" element={<Accessory />} />
+            <Route path="/" element={<Home />} />
+            <Route path="*" element={<div>404 not found</div>} />
+        </Routes>
     );
 }
 

@@ -65,17 +65,17 @@ const SignUpForm = () => {
             let severData = await RegisterService(email, username, phone, address, password);
             if (+severData.EC === 0) {
                 toast.success(severData.EM);
-                // history.push("/login");
+                setEmail('');
+                setUserName('');
+                setPhone('');
+                setAddress('');
+                setPassword('');
+                setObjectCheckInput({ ...defaultInput });
             } else {
                 toast.error(severData.EM);
             }
         }
     }
-    // useEffect(() => {
-    //     if (user && user.isAuthenticated) {
-    //         history.push('/')
-    //     }
-    // }, [])
     return (
         <div className="flex flex-col items-center justify-center h-full px-[50px] text-center bg-white">
             <h1 className="text-2xl font-bold mb-4">Create Account</h1>

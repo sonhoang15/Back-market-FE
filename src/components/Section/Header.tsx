@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { ShoppingCart, Search, Phone, User } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import logo from "../../assets/anh/logo.png";
 
 const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSticky, setIsSticky] = useState(true);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   // Lắng nghe scroll để bật/tắt sticky
   useEffect(() => {
@@ -17,6 +19,16 @@ const Header = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Lấy role từ localStorage
+  useEffect(() => {
+    const role = localStorage.getItem("role"); // "admin" hoặc "customer"
+    setUserRole(role);
+  }, []);
+
+  const handleAdminClick = () => {
+    navigate('/admin'); // chuyển hướng tới trang admin
+  };
   return (
     <header className="w-full">
       {/* Top bar */}
@@ -36,7 +48,7 @@ const Header = () => {
             </div>
             <div className="flex items-center space-x-1">
               <User size={16} />
-              <span>TÀI KHOẢN</span>
+              <NavLink to="/auth">TÀI KHOẢN</NavLink>
             </div>
           </div>
         </div>
@@ -79,6 +91,15 @@ const Header = () => {
                 <Search size={20} />
               </button>
             </div>
+            {/* Nút vào trang admin chỉ hiện khi role là admin */}
+            {userRole === 'admin' && (
+              <button
+                onClick={handleAdminClick}
+                className="bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition"
+              >
+                Quản Trị
+              </button>
+            )}
           </div>
         </div>
       </div>
