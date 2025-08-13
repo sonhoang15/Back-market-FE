@@ -1,0 +1,174 @@
+import React, { useState, useEffect } from 'react';
+import { fetchGroups } from '../../../Services/userService';
+import { toast } from 'react-toastify';
+import { fetchAllRole, fetchRoleByGroup, assignToGroup } from '../../../Services/roleService';
+import { AssignToGroupData } from '../../../Services/roleService';
+
+
+import _ from 'lodash';
+
+// ==== Interfaces ====
+interface Group {
+    id: number;
+    name: string;
+}
+
+interface Role {
+    id: number;
+    url: string;
+    description: string;
+}
+
+interface RoleWithAssign extends Role {
+    isAssigned: boolean;
+}
+
+interface ApiResponse<T> {
+    EC: number;
+    EM: string;
+    DT: T;
+}
+
+interface RoleByGroupResponse {
+    Roles: Role[];
+}
+
+interface AssignRolePayload {
+    groupId: number;
+    groupRoles: { groupId: number; roleId: number }[];
+}
+
+const GroupRole: React.FC = () => {
+    const [userGroups, setUserGroups] = useState<Group[]>([]);
+    const [listRoles, setListRoles] = useState<Role[]>([]);
+    const [selectGroup, setSelectGroup] = useState<number | ''>('');
+    const [assignRoleByGroup, setAssignRoleByGroup] = useState<RoleWithAssign[]>([]);
+
+    useEffect(() => {
+        getGroups();
+        getAllRoles();
+    }, []);
+
+    const getGroups = async () => {
+        let res: ApiResponse<Group[]> = await fetchGroups();
+        if (res && +res.EC === 0) {
+            setUserGroups(res.DT);
+        } else {
+            toast.error(res.EM);
+        }
+    };
+
+    const getAllRoles = async () => {
+        let data: ApiResponse<Role[]> = await fetchAllRole();
+        if (data && +data.EC === 0) {
+            setListRoles(data.DT);
+        } else {
+            console.error('Failed to fetch roles');
+        }
+    };
+
+    const handleOnchangeGroup = async (value: string) => {
+        const groupId = value ? Number(value) : '';
+        setSelectGroup(groupId);
+        if (groupId) {
+            let data: ApiResponse<RoleByGroupResponse> = await fetchRoleByGroup(groupId);
+            if (data && +data.EC === 0) {
+                let result = buildDataRoleByGroup(data.DT.Roles, listRoles);
+                setAssignRoleByGroup(result);
+            }
+        }
+    };
+
+    const buildDataRoleByGroup = (groupRoles: Role[], allRoles: Role[]): RoleWithAssign[] => {
+        let result: RoleWithAssign[] = [];
+        if (allRoles && allRoles.length > 0) {
+            allRoles.forEach(role => {
+                let object: RoleWithAssign = {
+                    ...role,
+                    isAssigned: groupRoles?.some(item => item.url === role.url) || false
+                };
+                result.push(object);
+            });
+        }
+        return result;
+    };
+
+    const handleSelectRoles = (value: string) => {
+        const _assignRoleByGroup = _.cloneDeep(assignRoleByGroup);
+        let foundIndex = _assignRoleByGroup.findIndex(item => +item.id === +value);
+        if (foundIndex > -1) {
+            _assignRoleByGroup[foundIndex].isAssigned = !_assignRoleByGroup[foundIndex].isAssigned;
+        }
+        setAssignRoleByGroup(_assignRoleByGroup);
+    };
+
+    const buildDataToSave = (): AssignToGroupData => {
+        const assignedRoles = assignRoleByGroup.filter(role => role.isAssigned);
+        return {
+            groupId: Number(selectGroup),
+            roleIds: assignedRoles.map(role => role.id)
+        };
+    };
+
+    const handleSave = async () => {
+        let data = buildDataToSave();
+        let res: ApiResponse<null> = await assignToGroup(data);
+        if (res && res.EC === 0) {
+            toast.success(res.EM);
+        } else {
+            toast.error(res.EM);
+        }
+    };
+
+    return (
+        <div className='group-role-container'>
+            <div className='container mt-3'>
+                <h4>Group Roles:</h4>
+                <div className='assign-group-role'>
+                    <div className='col-12 col-sm-6 form-group'>
+                        <label> Select Group:</label>
+                        <select
+                            className='form-select'
+                            onChange={(event) => handleOnchangeGroup(event.target.value)}
+                        >
+                            <option value=''>Select your group</option>
+                            {userGroups && userGroups.length > 0 &&
+                                userGroups.map((item, index) => (
+                                    <option key={`group-${index}`} value={item.id}>{item.name}</option>
+                                ))
+                            }
+                        </select>
+                    </div>
+                    <hr />
+                    {selectGroup &&
+                        <div className='roles'>
+                            <h5>Assign Roles:</h5>
+                            {assignRoleByGroup && assignRoleByGroup.length > 0 &&
+                                assignRoleByGroup.map((item, index) => (
+                                    <div className="form-check" key={`list-role-${index}`}>
+                                        <input
+                                            className="form-check-input"
+                                            type="checkbox"
+                                            value={item.id}
+                                            id={`list-role-${index}`}
+                                            checked={item.isAssigned}
+                                            onChange={(event) => handleSelectRoles(event.target.value)}
+                                        />
+                                        <label className="form-check-label" htmlFor={`list-role-${index}`}>
+                                            {item.url}
+                                        </label>
+                                    </div>
+                                ))
+                            }
+                            <div className='mt-3'>
+                                <button className='btn btn-warning' onClick={handleSave}>Save</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default GroupRole;

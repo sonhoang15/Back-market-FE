@@ -1,12 +1,11 @@
 import React from 'react';
+import { UserType } from './User';
 
 interface ModalDeleteProps {
     show: boolean;
     handleClose: () => void;
     ConfirmDelete: () => void;
-    userToDelete: {
-        email: string;
-    };
+    userToDelete: UserType;
 }
 
 const ModalDelete: React.FC<ModalDeleteProps> = ({

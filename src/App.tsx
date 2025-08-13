@@ -1,5 +1,5 @@
 import { BrowserRouter as Router } from "react-router-dom";
-import Header from "./components/Section/Header";
+import Header from "./components/Client/Section/Header";
 import Approutes from "./Routes/AppRoutes";
 import { ToastContainer } from 'react-toastify';
 

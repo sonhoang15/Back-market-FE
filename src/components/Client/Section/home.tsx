@@ -1,5 +1,4 @@
 
-import Header from './Header'
 import HeroSection from './HeroSection'
 import ServicesSection from './ServicesSection';
 import ProductsSection from '../productSection/ProductsSection';

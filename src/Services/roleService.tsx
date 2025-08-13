@@ -1,25 +1,32 @@
 import axios from "../setup/axios";
 
-interface Role {
-    id: number;
-    name: string;
-    [key: string]: any;
+// interface Role {
+//     id: number;
+//     url: string;
+//     description: string;
+//     name?: string;
+// }
+
+interface NewRole {
+    url: string;
+    description: string;
 }
 
 interface RoleData {
-    id: number;
+    id?: number;
     name?: string;
     [key: string]: any;
 }
 
-interface AssignToGroupData {
+export interface AssignToGroupData {
+
     groupId: number;
     roleIds: number[];
 }
 
 // ✅ Tạo danh sách role
-const createRoles = (roles: Role[]): Promise<any> => {
-    return axios.post('/api/v1/role/create', [...roles]);
+const createRoles = (roles: NewRole[]): Promise<any> => {
+    return axios.post('/api/v1/role/create', roles);
 };
 
 // ✅ Lấy tất cả role
@@ -44,7 +51,7 @@ const fetchRoleByGroup = (groupId: number): Promise<any> => {
 
 // ✅ Gán role vào group
 const assignToGroup = (data: AssignToGroupData): Promise<any> => {
-    return axios.post('/api/v1/role/assign-to-group', { data });
+    return axios.post('/api/v1/role/assign-to-group', data);
 };
 export {
     createRoles, fetchAllRole, deleteRole, fetchRoleByGroup, assignToGroup, updateUser

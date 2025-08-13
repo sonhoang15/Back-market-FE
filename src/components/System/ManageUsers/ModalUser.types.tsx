@@ -23,6 +23,7 @@ export interface ValidInputs {
 }
 
 export interface ModalUserProps {
+    Title: string;
     show: boolean;
     hide: () => void;
     action: 'CREATE' | 'UPDATE';

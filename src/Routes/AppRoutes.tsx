@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import AuthForm from "../components/Login-Register/AuthPage";
-import Accessory from "../components/subPage/accessory";
-import Home from "../components/Section/home";
+import Accessory from "../components/Client/subPage/accessory";
+import Home from "../components/Client/Section/home";
 
 function Approutes() {
     return (
