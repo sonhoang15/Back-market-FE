@@ -10,7 +10,6 @@ import { toast } from 'react-toastify';
 import ReactPaginate from 'react-paginate';
 import ModalDelete from './ModalDeleteRole';
 import ModalEditRole from './ModalEditRole';
-import './Roles.scss';
 
 interface Role {
   id: number;

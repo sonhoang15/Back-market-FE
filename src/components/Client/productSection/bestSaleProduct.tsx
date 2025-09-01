@@ -1,7 +1,7 @@
-import img1 from "../../assets/anh/6.jpeg";
-import img2 from "../../assets/anh/7.jpeg";
-import img3 from "../../assets/anh/8.jpeg";
-import img4 from "../../assets/anh/9.jpeg";
+import img1 from "../../../assets/anh/6.jpeg";
+import img2 from "../../../assets/anh/7.jpeg";
+import img3 from "../../../assets/anh/8.jpeg";
+import img4 from "../../../assets/anh/9.jpeg";
 
 import ProductCard from "./ProductCard";
 
@@ -70,7 +70,7 @@ export default function BestSaleProduct() {
             <div className="px-4 py-8">
                 <h1 className="text-2xl font-bold text-center mb-6 uppercase">Sản phẩm bán chạy</h1>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6">
                     {products.map((product) => (
                         <ProductCard key={product.id} product={product} />
                     ))}

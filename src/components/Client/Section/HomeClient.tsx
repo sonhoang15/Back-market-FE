@@ -20,7 +20,6 @@ function Home() {
                 <BestSaleProduct />
                 <LookBookSection />
                 <NewsSection />
-                <Footer />
             </div >
         </>
     )

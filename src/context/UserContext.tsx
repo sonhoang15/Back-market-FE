@@ -9,11 +9,12 @@ interface Account {
 }
 
 // Kiểu dữ liệu cho UserContext
-interface UserState {
+export interface UserState {
     isLoading: boolean;
     isAuthenticated: boolean;
     token: string;
     account: Account | {};
+    role: string;
 }
 
 // Kiểu dữ liệu cho Context
@@ -36,7 +37,9 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         isLoading: true,
         isAuthenticated: false,
         token: "",
-        account: {}
+        account: {},
+        role: ""
+
     };
 
     const [user, setUser] = useState<UserState>(userDefault);
@@ -57,7 +60,8 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
                 isAuthenticated: true,
                 token,
                 account: { groupWithRoles, email, username },
-                isLoading: false
+                isLoading: false,
+                role: groupWithRoles[0].groupId
             };
             setTimeout(() => setUser(data), 1000);
         } else {

@@ -1,23 +1,31 @@
 import { useEffect, useState } from 'react';
-import { ShoppingCart, Search, Phone, User } from 'lucide-react';
+import { Search, Phone, User } from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import logo from "../../assets/anh/logo.png";
+import logo from "../../../assets/anh/logo.png";
+import CartSidebar from '../productSection/cart';
 
 const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isSticky, setIsSticky] = useState(true);
+  const [isSticky, setIsSticky] = useState(false);
+  const [showTopBar, setShowTopBar] = useState(true);
   const [userRole, setUserRole] = useState<string | null>(null);
   const navigate = useNavigate();
 
   // Lắng nghe scroll để bật/tắt sticky
   useEffect(() => {
     const handleScroll = () => {
-      setIsSticky(window.scrollY > 40); // >40px là bắt đầu cuộn
+      if (window.scrollY === 0) {
+        setShowTopBar(true);  // hiện topbar khi ở đầu trang
+      } else {
+        setShowTopBar(false); // ẩn topbar khi cuộn xuống
+      }
+
+      setIsSticky(window.scrollY > 40); // sticky khi cuộn >40px
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Lấy role từ localStorage
@@ -33,8 +41,7 @@ const Header = () => {
     <header className="w-full">
       {/* Top bar */}
       <div
-        className={`bg-gray-100 border-b border-gray-200 py-2 transition-all duration-300 
-    ${isSticky ? 'opacity-0 invisible h-0 overflow-hidden' : 'opacity-100 visible h-auto'}`}
+        className={`w-full bg-gray-100 transition-all duration-300`}
       >
         <div className="max-w-7xl mx-auto px-4 flex justify-between items-center text-sm">
           <div className="flex items-center space-x-2 text-gray-600">
@@ -42,10 +49,7 @@ const Header = () => {
             <span>0325.542.941</span>
           </div>
           <div className="flex items-center space-x-4 text-gray-600">
-            <div className="flex items-center space-x-1">
-              <ShoppingCart size={16} />
-              <span>GIỎ HÀNG (0)</span>
-            </div>
+            <CartSidebar />
             <div className="flex items-center space-x-1">
               <User size={16} />
               <NavLink to="/auth">TÀI KHOẢN</NavLink>
@@ -56,13 +60,14 @@ const Header = () => {
 
       {/* Main header */}
       <div
-        className={`sticky top-0 z-50 bg-white border-b border-gray-200 ${isSticky ? 'shadow-md backdrop-blur bg-white/80' : ''} transition-shadow duration-300`}
+        className={`fixed left-0 w-full z-30 transition-all duration-600 
+      ${isSticky ? "shadow-md backdrop-blur bg-white/80 top-0" : "bg-white"}  `}
       >
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center space-x-2">
-              <NavLink to="/">
+              <NavLink to="/home">
                 <img src={logo} alt="logo" width={70} height={70} className="object-contain" />
               </NavLink>
             </div>

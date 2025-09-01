@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import BuyNowModal from './buyNow';
 
 interface Product {
     img: string;
@@ -15,10 +16,10 @@ export default function ProductCard({ product }: ProductCardProps) {
     const [currentImage, setCurrentImage] = useState(product.img);
 
     return (
-        <div className="product-item border rounded-lg shadow-lg p-4">
+        <div className="product-item shadow-lg p-4">
             {/* Ảnh chính */}
             <div className="product-top mb-4">
-                <a href="#" className="product-thumb block overflow-hidden rounded-lg">
+                <a href="/productDetail" className="product-thumb block overflow-hidden ">
                     <img
                         src={currentImage}
                         alt={product.name}
@@ -55,23 +56,11 @@ export default function ProductCard({ product }: ProductCardProps) {
                     {product.price}
                 </span>
             </div>
-            <div className="product-buttom">
-                <ul className="framesale flex justify-center gap-4 mt-5 mb-5">
+            <div className="mt-2">
+                <ul className="flex justify-around border border-black p-[10px]">
+                    <BuyNowModal />
                     <li>
-                        <a
-                            href="#"
-                            className="bg-white text-black border border-black rounded px-4 py-2 transition-colors duration-300 hover:bg-black hover:text-white"
-                        >
-                            Mua Ngay
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="product.html"
-                            className="bg-white text-black border border-black rounded px-4 py-2 transition-colors duration-300 hover:bg-black hover:text-white"
-                        >
-                            Chi Tiết
-                        </a>
+                        <a href="/productDetail" className="text-black hover:text-gray-400">Chi Tiết</a>
                     </li>
                 </ul>
             </div>

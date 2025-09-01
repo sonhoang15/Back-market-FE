@@ -1,13 +1,9 @@
-import img1 from "../../assets/anh/251.webp"
+
 
 const Footer = () => {
     return (
         <>
             <div className="top-[720px]">
-                <div className="relative w-full mt-[70px]">
-                    <img src={img1} alt="" className="w-full object-cover" />
-                </div>
-
                 <div className="relative w-full mt-[70px]">
                     <div className="border-t border-gray-300 flex flex-wrap p-10 relative -bottom-12">
                         <div className="w-full md:w-1/4 text-left px-5 mb-4">

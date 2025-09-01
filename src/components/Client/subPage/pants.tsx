@@ -3,6 +3,7 @@ import img2 from "../../../assets/anh/7.jpeg";
 import img3 from "../../../assets/anh/8.jpeg";
 import img4 from "../../../assets/anh/9.jpeg";
 
+
 import ProductCard from "../productSection/ProductCard";
 
 
@@ -64,24 +65,25 @@ const products = [
         thumbnails: [img4, img1],
     },
 ];
-
-function Accessory() {
+function Pants() {
     return (
         <>
+            {/* Tiêu đề */}
             <div className="flex ml-[45px] mt-[10px]">
-                <div>
-                    <a href="/home" className="text-black no-underline flex items-center">
+                <div className="back">
+                    <a href="/home" className="no-underline text-black">
                         <i className="fa-solid fa-house-chimney"></i>
-                        <span className="ml-1">Trang chủ |</span>
+                        <span>Trang chủ |</span>
                     </a>
                 </div>
-                <span className="ml-[10px]">Phụ kiện</span>
+                <span className="ml-[10px]">Quần</span>
             </div>
 
+            {/* Header */}
             <div className="mt-[80px] ml-[45px] flex justify-between">
 
                 <div>
-                    <h1 className="uppercase text-[35px] font-semibold font-sans">Phụ kiện</h1>
+                    <h1 className="uppercase text-[35px] font-semibold font-sans">Quần</h1>
                     <div className="relative flex mt-[21px]">
                         <h4 className="mt-[21px]">BỘ LỌC</h4>
                         <ul className="flex ml-[50px] mt-[21px]">
@@ -174,15 +176,13 @@ function Accessory() {
                 </div>
             </div>
 
-
+            {/* Products */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6">
                 {products.map((product) => (
                     <ProductCard key={product.id} product={product} />
                 ))}
             </div>
-
         </>
     );
 }
-
-export default Accessory;
+export default Pants;

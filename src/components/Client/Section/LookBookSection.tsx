@@ -1,7 +1,7 @@
-import anh1 from '../../assets/anh/234.jpg'
-import anh2 from '../../assets/anh/235.jpg'
-import anh3 from '../../assets/anh/236.jpg'
-import anh4 from '../../assets/anh/237.jpg'
+import anh1 from '../../../assets/anh/234.jpg'
+import anh2 from '../../../assets/anh/235.jpg'
+import anh3 from '../../../assets/anh/236.jpg'
+import anh4 from '../../../assets/anh/237.jpg'
 
 
 const LookBookSection = () => {

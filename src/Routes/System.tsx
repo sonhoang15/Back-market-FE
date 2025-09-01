@@ -4,6 +4,7 @@ import Roles from '../components/System/Roles/Roles';
 import GroupRole from '../components/System/Roles/GroupRole';
 import User from '../components/System/ManageUsers/User';
 import Header from '../components/System/Nav';
+import { UserContext, UserState } from "../context/UserContext";
 
 interface User {
   isLoggedIn: boolean;
@@ -12,19 +13,19 @@ interface User {
 
 interface SystemProps {
   systemMenuPath: string;
-  user: User;
+  user: UserState;
 }
 
 class System extends Component<SystemProps> {
   render() {
     const { systemMenuPath, user } = this.props;
 
-    if (!user.isLoggedIn) {
+    if (!user.isAuthenticated) {
       // Nếu chưa đăng nhập thì redirect về login
       return <Navigate to="/login" />;
     }
 
-    if (user.role !== 'admin') {
+    if (user.role !== '1') {
       // Nếu không phải admin thì chuyển đến trang không được phép truy cập
       return <Navigate to="/" />;
     }
