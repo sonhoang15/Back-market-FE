@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Roles from '../components/System/Roles/Roles';
 import GroupRole from '../components/System/Roles/GroupRole';
 import User from '../components/System/ManageUsers/User';
 import Header from '../components/System/Nav';
-import { UserContext, UserState } from "../context/UserContext";
+import { UserState } from "../context/UserContext";
 
 interface User {
   isLoggedIn: boolean;
@@ -18,16 +18,16 @@ interface SystemProps {
 
 class System extends Component<SystemProps> {
   render() {
-    const { systemMenuPath, user } = this.props;
+    const { user } = this.props;
 
     if (!user.isAuthenticated) {
       // Nếu chưa đăng nhập thì redirect về login
       return <Navigate to="/login" />;
     }
 
-    if (user.role !== '1') {
+    if (user?.account?.groupWithRoles?.id !== 1) {
       // Nếu không phải admin thì chuyển đến trang không được phép truy cập
-      return <Navigate to="/" />;
+      return <Navigate to="/home" />;
     }
 
     // Nếu là admin thì render nội dung hệ thống
@@ -37,11 +37,17 @@ class System extends Component<SystemProps> {
         <div className="system-container">
           <div className="system-list">
             <Routes>
-              <Route path="/system/user" element={<User />} />
-              <Route path="/system/group-role" element={<GroupRole />} />
-              <Route path="/system/roles" element={<Roles />} />
-              <Route path="*" element={<Navigate to={systemMenuPath} replace />} />
+              {/* khi vào /system thì tự động chuyển sang /system/user */}
+              <Route index element={<Navigate to="user" replace />} />
+
+              <Route path="user" element={<User />} />
+              <Route path="group-role" element={<GroupRole />} />
+              <Route path="roles" element={<Roles />} />
+
+              {/* fallback khác: hiện 404 thay vì quay về /system */}
+              <Route path="*" element={<div>Page not found in System</div>} />
             </Routes>
+
           </div>
         </div>
       </>

@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { logOutUser } from '../../Services/userService';
 import { toast } from 'react-toastify';
+import logo from "../../assets/anh/logo.png";
 
 const NavHeader: React.FC = () => {
     const { user, logoutContext } = useContext<any>(UserContext);
@@ -33,47 +34,88 @@ const NavHeader: React.FC = () => {
     }
 
     return (
-        <header className="bg-gray-900 text-white shadow">
-            <div className="container mx-auto px-4 flex items-center justify-between h-16">
+        <header className="bg-gray-700 text-white shadow">
+            <div className="container mx-auto px-4 flex items-center justify-between h-[80px]">
                 {/* Brand */}
-                <Link to="/" className="text-xl font-bold flex items-center gap-2">
-                    <span>C</span>
-                    <i className="fa fa-codepen" aria-hidden="true" />
-                    <span>D E</span>
-                </Link>
+                <NavLink to="/home" className="flex items-center">
+                    <img
+                        src={logo}
+                        alt="logo"
+                        width={60}
+                        height={60}
+                        className="object-contain"
+                    />
+                </NavLink>
 
                 {/* Mobile menu button */}
                 <button
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
-                    className="lg:hidden focus:outline-none"
+                    className="lg:hidden p-2 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors duration-200"
                     aria-label="Toggle menu"
                 >
-                    <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                    <svg
+                        className="w-6 h-6"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    >
                         {isMenuOpen ? (
-                            <path
-                                fillRule="evenodd"
-                                clipRule="evenodd"
-                                d="M18.364 5.636l-1.414-1.414L12 9.172 7.05 4.222 5.636 5.636 10.586 10.586 5.636 15.536l1.414 1.414L12 12.828l4.95 4.95 1.414-1.414-4.95-4.95 4.95-4.95z"
-                            />
+                            // Icon "X" (close)
+                            <path d="M6 18L18 6M6 6l12 12" />
                         ) : (
+                            // Icon "☰" (hamburger)
                             <path d="M4 6h16M4 12h16M4 18h16" />
                         )}
                     </svg>
                 </button>
 
+
                 {/* Desktop menu */}
                 <nav className="hidden lg:flex lg:items-center lg:space-x-6">
-                    <NavLink to="/" className={({ isActive }) =>
-                        "nav-link menus " + (isActive ? "font-semibold underline" : "")}>Home</NavLink>
-                    <NavLink to="/users" className={({ isActive }) =>
-                        "nav-link menus " + (isActive ? "font-semibold underline" : "")}>User</NavLink>
-                    <NavLink to="/roles" className={({ isActive }) =>
-                        "nav-link menus " + (isActive ? "font-semibold underline" : "")}>Roles</NavLink>
-                    <NavLink to="/group-role" className={({ isActive }) =>
-                        "nav-link menus " + (isActive ? "font-semibold underline" : "")}>Group roles</NavLink>
-                    <NavLink to="/about" className={({ isActive }) =>
-                        "nav-link menus " + (isActive ? "font-semibold underline" : "")}>About</NavLink>
+                    <NavLink
+                        to="/system/user"
+                        className={({ isActive }) =>
+                            `px-3 py-1 border border-gray-700 rounded hover:bg-gray-800 ${isActive ? "bg-gray-800 text-white" : ""
+                            }`
+                        }
+                    >
+                        User
+                    </NavLink>
+
+                    <NavLink
+                        to="/system/roles"
+                        className={({ isActive }) =>
+                            `px-3 py-1 border border-gray-700 rounded hover:bg-gray-800 ${isActive ? "bg-gray-800 text-white" : ""
+                            }`
+                        }
+                    >
+                        Role
+                    </NavLink>
+
+                    <NavLink
+                        to="/system/group-role"
+                        className={({ isActive }) =>
+                            `px-3 py-1 border border-gray-700 rounded hover:bg-gray-800 ${isActive ? "bg-gray-800 text-white" : ""
+                            }`
+                        }
+                    >
+                        Group roles
+                    </NavLink>
+
+                    <NavLink
+                        to="/system/add-product"
+                        className={({ isActive }) =>
+                            `px-3 py-1 border border-gray-700 rounded hover:bg-gray-800 ${isActive ? "bg-gray-800 text-white" : ""
+                            }`
+                        }
+                    >
+                        Add product
+                    </NavLink>
                 </nav>
+
 
                 {/* Desktop user section */}
                 <div className="hidden lg:flex items-center space-x-4">

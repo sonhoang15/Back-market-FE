@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import ReactPaginate from 'react-paginate';
 import ModalDelete from './ModalDeleteRole';
 import ModalEditRole from './ModalEditRole';
+import { FaPencilAlt, FaTrash } from "react-icons/fa";
 
 interface Role {
   id: number;
@@ -99,73 +100,85 @@ const TableRoles = forwardRef<TableRolesRef>((props, ref: Ref<TableRolesRef>) =>
 
   return (
     <>
-      <div className="user-table">
-        <div className="mt-3 table-role">
-          <table className="table table-hover table-bordered">
+      <div className="mt-3">
+        <div className="overflow-auto border rounded-lg">
+          <table className="w-full border-collapse">
             <thead>
-              <tr>
-                <th scope="col">No</th>
-                <th scope="col">URL</th>
-                <th scope="col">Description</th>
-                <th scope="col">Action</th>
+              <tr className="bg-gray-100 text-left">
+                <th className="border px-4 py-2">No</th>
+                <th className="border px-4 py-2">URL</th>
+                <th className="border px-4 py-2">Description</th>
+                <th className="border px-4 py-2">Action</th>
               </tr>
             </thead>
             <tbody>
               {listRoles.length > 0 ? (
                 listRoles.map((item, index) => (
-                  <tr key={`url-${index}`}>
-                    <th>{(itemOffset - 1) * itemLimit + index + 1}</th>
-                    <td>{item.url}</td>
-                    <td>{item.description}</td>
-                    <td>
-                      <span
-                        className="edit"
-                        onClick={() => handleEditRole(item)}
-                      >
-                        <i className="fa fa-pencil" aria-hidden="true"></i>
-                      </span>
-                      <span
-                        className="delete"
-                        onClick={() => handleDeleteRole(item)}
-                      >
-                        <i className="fa fa-trash" aria-hidden="true"></i>
-                      </span>
+                  <tr
+                    key={`url-${index}`}
+                    className="hover:bg-gray-50 transition"
+                  >
+                    <td className="border px-4 py-2">
+                      {(itemOffset - 1) * itemLimit + index + 1}
+                    </td>
+                    <td className="border px-4 py-2">{item.url}</td>
+                    <td className="border px-4 py-2">{item.description}</td>
+                    <td className="border px-4 py-2 text-center">
+                      <div className="flex justify-center space-x-3">
+                        <span
+                          className="text-yellow-500 cursor-pointer hover:text-yellow-600"
+                          onClick={() => handleEditRole(item)}
+                        >
+                          <FaPencilAlt />
+                        </span>
+                        <span
+                          className="text-red-500 cursor-pointer hover:text-red-600"
+                          onClick={() => handleDeleteRole(item)}
+                        >
+                          <FaTrash />
+                        </span>
+                      </div>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4}>not found roles</td>
+                  <td className="px-4 py-2 text-center" colSpan={4}>
+                    not found roles
+                  </td>
                 </tr>
               )}
             </tbody>
           </table>
-          {pageCount > 0 && (
-            <div className="footer">
-              <ReactPaginate
-                nextLabel="next >"
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={3}
-                marginPagesDisplayed={2}
-                pageCount={pageCount}
-                previousLabel="< previous"
-                pageClassName="page-item"
-                pageLinkClassName="page-link"
-                previousClassName="page-item"
-                previousLinkClassName="page-link"
-                nextClassName="page-item"
-                nextLinkClassName="page-link"
-                breakLabel="..."
-                breakClassName="page-item"
-                breakLinkClassName="page-link"
-                containerClassName="pagination"
-                activeClassName="active"
-                renderOnZeroPageCount={null}
-              />
-            </div>
-          )}
+        </div>
+        <div className="mt-4 flex justify-center">
+          <ReactPaginate
+            nextLabel="next >"
+            previousLabel="< previous"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={3}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            containerClassName="flex space-x-2"
+
+            pageClassName="inline-block"
+            pageLinkClassName="px-3 py-1 border rounded-md cursor-pointer hover:bg-gray-100"
+
+            previousClassName="inline-block"
+            previousLinkClassName="px-3 py-1 border rounded-md cursor-pointer hover:bg-gray-100"
+
+            nextClassName="inline-block"
+            nextLinkClassName="px-3 py-1 border rounded-md cursor-pointer hover:bg-gray-100"
+
+            breakClassName="inline-block"
+            breakLinkClassName="px-3 py-1 border rounded-md"
+
+            activeLinkClassName="bg-blue-500 text-white border-blue-500"
+            disabledLinkClassName="opacity-50 cursor-not-allowed"
+          />
         </div>
       </div>
+
 
       <ModalDelete
         show={showModalDelete}

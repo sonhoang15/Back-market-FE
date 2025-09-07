@@ -38,7 +38,7 @@ const ModalUser: React.FC<ModalUserProps> = ({
     }, []);
 
     useEffect(() => {
-        if (action === 'UPDATE') {
+        if (action === 'UPDATE' && dataModalUser) {
             setUserData({
                 ...dataModalUser,
                 group: dataModalUser.Group ? dataModalUser.Group.id : '',
@@ -94,19 +94,17 @@ const ModalUser: React.FC<ModalUserProps> = ({
         if (check) {
             let res =
                 action === 'CREATE'
-                    ? toast.success('Create success...') &&
-                    (await createNewUser({ ...userData, groupId: userData['group'] }))
-                    : toast.success('Update success...') &&
-                    (await updateUser({ ...userData, groupId: userData['group'] }));
+                    ? await createNewUser({ ...userData, groupId: userData['group'] })
+                    : await updateUser({ ...userData, groupId: userData['group'] });
 
             if (res && res.EC === 0) {
+                toast.success(action === 'CREATE' ? 'Create success...' : 'Update success...');
                 hide();
                 setUserData({
                     ...defaultUserdata,
                     group: groups.length > 0 ? groups[0].id : '',
                 });
-            }
-            if (res && res.EC !== 0) {
+            } else if (res && res.EC !== 0) {
                 toast.error(res.EM);
                 let _validInputs = _.cloneDeep(validInputsDefault);
                 _validInputs[res.DT as keyof ValidInputs] = false;
@@ -114,6 +112,7 @@ const ModalUser: React.FC<ModalUserProps> = ({
             }
         }
     };
+
 
     const handleCloseModalUser = () => {
         hide();
@@ -127,13 +126,13 @@ const ModalUser: React.FC<ModalUserProps> = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 overflow-y-auto">
             <div className="bg-white w-full max-w-4xl rounded-xl shadow-lg p-6">
                 {/* Header */}
-                <div className="flex justify-between items-center border-b pb-3">
+                <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <h2 className="text-lg font-semibold text-gray-800">
-                        {action === 'CREATE' ? 'Create new user' : 'Edit user'}
+                        {action === "CREATE" ? "Create new user" : "Edit user"}
                     </h2>
                     <button
                         onClick={handleCloseModalUser}
-                        className="text-gray-500 hover:text-gray-700 transition"
+                        className="text-gray-500 hover:text-gray-700 transition-colors"
                     >
                         ✕
                     </button>
@@ -143,87 +142,87 @@ const ModalUser: React.FC<ModalUserProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                     {/* Email */}
                     <div>
-                        <label className="block text-sm font-medium">Email</label>
+                        <label className="block text-sm font-medium text-gray-700">Email</label>
                         <input
-                            disabled={action !== 'CREATE'}
+                            disabled={action !== "CREATE"}
                             type="email"
-                            className={`mt-1 block w-full rounded-md border px-3 py-2 ${validInputs.email
-                                ? 'border-gray-300'
-                                : 'border-red-500 focus:border-red-500'
+                            className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none ${validInputs.email
+                                ? "border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
+                                : "border-red-500 focus:border-red-500 focus:ring focus:ring-red-200"
                                 }`}
                             value={userData.email}
-                            onChange={(e) => handleChange(e.target.value, 'email')}
+                            onChange={(e) => handleChange(e.target.value, "email")}
                         />
                     </div>
 
                     {/* Username */}
                     <div>
-                        <label className="block text-sm font-medium">Username</label>
+                        <label className="block text-sm font-medium text-gray-700">Username</label>
                         <input
                             type="text"
-                            className={`mt-1 block w-full rounded-md border px-3 py-2 ${validInputs.username
-                                ? 'border-gray-300'
-                                : 'border-red-500 focus:border-red-500'
+                            className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none ${validInputs.username
+                                ? "border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
+                                : "border-red-500 focus:border-red-500 focus:ring focus:ring-red-200"
                                 }`}
                             value={userData.username}
-                            onChange={(e) => handleChange(e.target.value, 'username')}
+                            onChange={(e) => handleChange(e.target.value, "username")}
                         />
                     </div>
 
                     {/* Phone */}
                     <div>
-                        <label className="block text-sm font-medium">Phone</label>
+                        <label className="block text-sm font-medium text-gray-700">Phone</label>
                         <input
-                            disabled={action !== 'CREATE'}
+                            disabled={action !== "CREATE"}
                             type="text"
-                            className={`mt-1 block w-full rounded-md border px-3 py-2 ${validInputs.phone
-                                ? 'border-gray-300'
-                                : 'border-red-500 focus:border-red-500'
+                            className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none ${validInputs.phone
+                                ? "border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
+                                : "border-red-500 focus:border-red-500 focus:ring focus:ring-red-200"
                                 }`}
                             value={userData.phone}
-                            onChange={(e) => handleChange(e.target.value, 'phone')}
+                            onChange={(e) => handleChange(e.target.value, "phone")}
                         />
                     </div>
 
                     {/* Password */}
-                    {action === 'CREATE' && (
+                    {action === "CREATE" && (
                         <div>
-                            <label className="block text-sm font-medium">Password</label>
+                            <label className="block text-sm font-medium text-gray-700">Password</label>
                             <input
                                 type="password"
-                                className={`mt-1 block w-full rounded-md border px-3 py-2 ${validInputs.password
-                                    ? 'border-gray-300'
-                                    : 'border-red-500 focus:border-red-500'
+                                className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none ${validInputs.password
+                                    ? "border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
+                                    : "border-red-500 focus:border-red-500 focus:ring focus:ring-red-200"
                                     }`}
                                 value={userData.password}
-                                onChange={(e) => handleChange(e.target.value, 'password')}
+                                onChange={(e) => handleChange(e.target.value, "password")}
                             />
                         </div>
                     )}
 
                     {/* Address */}
                     <div className="sm:col-span-2">
-                        <label className="block text-sm font-medium">Address</label>
+                        <label className="block text-sm font-medium text-gray-700">Address</label>
                         <input
                             type="text"
-                            className={`mt-1 block w-full rounded-md border px-3 py-2 ${validInputs.address
-                                ? 'border-gray-300'
-                                : 'border-red-500 focus:border-red-500'
+                            className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none ${validInputs.address
+                                ? "border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
+                                : "border-red-500 focus:border-red-500 focus:ring focus:ring-red-200"
                                 }`}
                             value={userData.address}
-                            onChange={(e) => handleChange(e.target.value, 'address')}
+                            onChange={(e) => handleChange(e.target.value, "address")}
                         />
                     </div>
 
                     {/* Group */}
                     <div>
-                        <label className="block text-sm font-medium">Group</label>
+                        <label className="block text-sm font-medium text-gray-700">Group</label>
                         <select
-                            className={`mt-1 block w-full rounded-md border px-3 py-2 ${validInputs.group
-                                ? 'border-gray-300'
-                                : 'border-red-500 focus:border-red-500'
+                            className={`mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:outline-none ${validInputs.group
+                                ? "border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
+                                : "border-red-500 focus:border-red-500 focus:ring focus:ring-red-200"
                                 }`}
-                            onChange={(e) => handleChange(e.target.value, 'group')}
+                            onChange={(e) => handleChange(e.target.value, "group")}
                             value={userData.group}
                         >
                             {groups.map((group, index) => (
@@ -236,23 +235,22 @@ const ModalUser: React.FC<ModalUserProps> = ({
                 </div>
 
                 {/* Footer */}
-                <div className="flex justify-end gap-3 mt-6 border-t pt-4">
+                <div className="flex justify-end gap-3 mt-6 border-t border-gray-200 pt-4">
                     <button
                         onClick={handleCloseModalUser}
-                        className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
+                        className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors"
                     >
                         Close
                     </button>
                     <button
                         onClick={ConfirmUser}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                     >
-                        {action === 'CREATE' ? 'Save' : 'Update'}
+                        {action === "CREATE" ? "Save" : "Update"}
                     </button>
                 </div>
             </div>
         </div>
     );
-};
-
+}
 export default ModalUser;

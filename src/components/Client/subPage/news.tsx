@@ -101,11 +101,11 @@ const News = () => {
     return (
         <div className="px-10 pt-10">
             {/* breadcrumb */}
-            <div className="flex w-full h-9 bg-[#f5f5f5]">
-                <a href="/home" className="no-underline mt-3">
+            <div className="flex w-full h-9 bg-[#f5f5f5] mt-[100px]">
+                <a href="/home" className="no-underline mt-[8px]">
                     <span className="text-black px-3 ml-[30px]">Trang chủ</span>
                 </a>
-                <p className="m-3 ml-[-6px]">» Tin tức</p>
+                <p className="mt-[8px] ml-[-6px]">» Tin tức</p>
             </div>
 
             <div className="grid grid-cols-3 gap-12 mt-[60px] w-full max-w-[1200px] mx-auto px-6">

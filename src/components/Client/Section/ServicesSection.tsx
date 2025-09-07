@@ -25,7 +25,7 @@ const ServicesSection = () => {
 
   return (
     <div className="py-16 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-[100rem] mx-auto">
         <div className="grid md:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <div key={index} className="bg-white p-8 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow duration-300">

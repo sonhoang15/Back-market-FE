@@ -1,65 +1,25 @@
-import React, { ReactNode, useContext } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import AuthForm from "../components/Login-Register/AuthPage";
 import Accessory from "../components/Client/subPage/accessory";
 import Home from "../components/Client/Section/HomeClient";
-import System from "../Routes/System";
 import Pants from "../components/Client/subPage/pants";
 import Shirts from "../components/Client/subPage/shirt";
 import News from "../components/Client/subPage/news";
 import ProductDetail from "../components/Client/subPage/productDetail";
-import BuyNowModal from "../components/Client/productSection/buyNow";
+import User from "../components/System/ManageUsers/User";
+import GroupRole from "../components/System/Roles/GroupRole";
+import Roles from "../components/System/Roles/Roles";
 
-import { UserContext } from "../context/UserContext";
+import ClientLayout from "../layouts/ClientLayout";
+import SystemLayout from "../layouts/SystemLayout";
+import { PublicRoute, AdminRoute, HomeRedirect } from "./RouteGuards";
+import AdminAddProduct from "../components/System/Product/AdminAddProduct";
+// bạn tách riêng mấy hàm PrivateRoute, PublicRoute, AdminRoute, HomeRedirect ra 1 file RouteGuards.tsx cho gọn
 
-interface User {
-    isAuthenticated: boolean;
-    // thêm các trường khác nếu có
-}
-
-interface UserContextType {
-    user: User;
-}
-
-interface PrivateRouteProps {
-    children: ReactNode;
-}
-
-function PrivateRoute({ children }: PrivateRouteProps) {
-    const context = useContext(UserContext);
-    if (!context) {
-        throw new Error("UserContext must be used within a UserProvider");
-    }
-    const { user } = context;
-    return user.isAuthenticated ? <>{children}</> : <Navigate to="/auth" replace />;
-}
-
-function PublicRoute({ children }: PrivateRouteProps) {
-    const context = useContext(UserContext);
-    if (!context) {
-        throw new Error("UserContext must be used within a UserProvider");
-    }
-    const { user } = context;
-    return !user.isAuthenticated ? <>{children}</> : <Navigate to="/system" replace />;
-}
-
-function HomeRedirect() {
-    const context = useContext(UserContext);
-    if (!context) {
-        throw new Error("UserContext must be used within a UserProvider");
-    }
-    const { user } = context;
-    return user.isAuthenticated ? <Navigate to="/system" replace /> : <Navigate to="/home" replace />;
-}
-function Approutes() {
-    const context = useContext(UserContext);
-    if (!context) {
-        throw new Error("UserContext must be used within a UserProvider");
-    }
-    const { user } = context;
+export default function AppRoutes() {
     return (
         <Routes>
-            {/* Route đăng nhập: chỉ truy cập khi chưa đăng nhập */}
+            {/* Auth */}
             <Route
                 path="/auth"
                 element={
@@ -69,34 +29,38 @@ function Approutes() {
                 }
             />
 
-            {/* Route phụ kiện, có thể truy cập bình thường */}
-            <Route path="/accessories" element={<Accessory />} />
-            <Route path="/pants" element={<Pants />} />
-            <Route path="/shirts" element={<Shirts />} />
-            <Route path="/news" element={<News />} />
-            <Route path="/productDetail" element={<ProductDetail />} />
+            {/* Client routes */}
+            <Route element={<ClientLayout />}>
+                <Route path="/accessories" element={<Accessory />} />
+                <Route path="/pants" element={<Pants />} />
+                <Route path="/shirts" element={<Shirts />} />
+                <Route path="/news" element={<News />} />
+                <Route path="/productDetail" element={<ProductDetail />} />
+                <Route path="/home" element={<Home />} />
+            </Route>
 
-
-
-            {/* Route hệ thống chỉ cho người đã đăng nhập */}
+            {/* System routes */}
             <Route
-                path="/system/*"
+                path="/system"
                 element={
-                    <PrivateRoute>
-                        <System systemMenuPath="/system" user={user} />
-                    </PrivateRoute>
+                    <AdminRoute>
+                        <SystemLayout />
+                    </AdminRoute>
                 }
-            />
+            >
+                <Route index element={<Navigate to="user" replace />} />
+                <Route path="user" element={<User />} />
+                <Route path="group-role" element={<GroupRole />} />
+                <Route path="roles" element={<Roles />} />
+                <Route path="add-product" element={<AdminAddProduct />} />
+                <Route path="*" element={<div>Page not found in System</div>} />
+            </Route>
 
-            {/* Route /home là trang chủ hiển thị khi chưa đăng nhập */}
-            <Route path="/home" element={<Home />} />
-
-            {/* Trang gốc / sẽ redirect theo trạng thái đăng nhập */}
+            {/* Root redirect */}
             <Route path="/" element={<HomeRedirect />} />
 
-            {/* Route fallback 404 */}
+            {/* 404 */}
             <Route path="*" element={<div>404 not found</div>} />
         </Routes>
     );
 }
-export default Approutes;

@@ -57,7 +57,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                 </span>
             </div>
             <div className="mt-2">
-                <ul className="flex justify-around border border-black p-[10px]">
+                <ul className="flex justify-around border border-black p-[10px] ">
                     <BuyNowModal />
                     <li>
                         <a href="/productDetail" className="text-black hover:text-gray-400">Chi Tiết</a>

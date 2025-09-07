@@ -2,9 +2,8 @@ import { useEffect, useState, useContext } from 'react';
 import { toast } from 'react-toastify';
 import { LoginService } from "../../Services/userService";
 import { UserContext } from "../../context/UserContext"
-import { join } from "lodash";
 import { ClimbingBoxLoader } from "react-spinners";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const SignInForm = () => {
     const navigate = useNavigate();
@@ -19,12 +18,12 @@ const SignInForm = () => {
     const [objvalidInput, setObjValidInput] = useState(defaultInput);
 
     const login = async () => {
-        setObjValidInput(defaultInput)
+        setObjValidInput(defaultInput);
         if (!valueLogin) {
             setObjValidInput({
                 ...objvalidInput,
                 isValidValueLogin: false
-            })
+            });
             toast.error("Please enter your email or phone number");
             return;
         }
@@ -32,51 +31,51 @@ const SignInForm = () => {
             setObjValidInput({
                 ...objvalidInput,
                 isValidPassword: false
-            })
+            });
             toast.error("Please enter your password");
             return;
         }
 
-        setIsLoading(true); // Bắt đầu loading
+        setIsLoading(true);
         try {
-            let response = await LoginService(valueLogin, password)
+            let response = await LoginService(valueLogin, password);
+
             if (response && +response.EC === 0) {
-                let groupWithRoles = response.DT.groupWithRoles;
-                let email = response.DT.email;
-                let username = response.DT.username;
-                let token = response.DT.access_token
+                let { groupWithRoles, email, username, access_token: token } = response.DT;
+
                 let data = {
                     isAuthenticated: true,
                     token,
                     account: { groupWithRoles, email, username },
-                    isLoading: false
-                }
-                localStorage.setItem("jwt", token)
-                loginContext(data)
-                navigate("/");
-                toast.success("Login success");
-            }
-            if (response && +response.EC === 0) {
-                if (response.user.roleid === 'R1') {
-                    navigate('/system');
+                    isLoading: false,
+                    role: groupWithRoles?.groupId ?? null
+                };
+
+                localStorage.setItem("jwt", token);
+                loginContext(data);
+
+                // Điều hướng theo groupWithRoles
+                if (groupWithRoles.groupId === "1") {
+                    navigate("/system");
                 } else {
-                    navigate('/home');
+                    navigate("/home");
                 }
-            }
-            if (response && +response.EC !== 0) {
+
+                toast.success("Login success");
+            } else {
                 setObjValidInput({
                     ...objvalidInput,
                     isValidValueLogin: false
-                })
+                });
                 toast.error(response?.EM || "Login failed");
             }
         } catch (error) {
             toast.error("Something went wrong!");
         } finally {
-            setIsLoading(false); // Kết thúc loading dù thành công hay lỗi
+            setIsLoading(false);
         }
+    };
 
-    }
 
     const handlePressEnter = (e: React.KeyboardEvent) => {
         if (e.charCode === 13 || e.code === 'Enter') {
@@ -85,9 +84,9 @@ const SignInForm = () => {
     }
     useEffect(() => {
         if (user && user.isAuthenticated) {
-            navigate('/')
+            navigate('/home')
         }
-    }, [])
+    }, [user])
     return (
         <>
             {isLoading ? (

@@ -1,17 +1,12 @@
 import { BrowserRouter as Router } from "react-router-dom";
-import Header from "./components/Client/Section/Header";
-import Approutes from "./Routes/AppRoutes";
-import { ToastContainer } from 'react-toastify';
-import Footer from "./components/Client/Section/Footer";
+import AppRoutes from "./Routes/AppRoutes";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // nhớ import CSS
 
 function App() {
   return (
     <>
-      <div>
-        <Header />
-        <Approutes />
-        <Footer />
-      </div>
+      <AppRoutes />
       <ToastContainer
         position="top-center"
         autoClose={3000}
@@ -25,7 +20,6 @@ function App() {
         theme="dark"
       />
     </>
-
   );
 }
 

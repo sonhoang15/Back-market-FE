@@ -3,7 +3,7 @@ import { RegisterService } from "../../Services/userService";
 import { useEffect, useState } from "react";
 import * as React from 'react';
 import { toast } from 'react-toastify';
-import { useHistory, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const SignUpForm = () => {
     // const { user } = useContext(UserContext)

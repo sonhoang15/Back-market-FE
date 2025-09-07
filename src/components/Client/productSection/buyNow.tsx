@@ -24,7 +24,7 @@ const BuyNowModal = () => {
         <div>
             <button
                 onClick={() => setIsOpen(true)}
-                className="text-black pr-[40px] mr-[-30px] border-r border-black hover:text-gray-400"
+                className="text-black pr-[70px] mr-[-30px] border-r border-black hover:text-gray-400"
             >
                 Mua ngay
             </button>

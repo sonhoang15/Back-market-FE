@@ -68,11 +68,11 @@ const products = [
 function Accessory() {
     return (
         <>
-            <div className="flex ml-[45px] mt-[10px]">
+            <div className="flex ml-[45px] mt-[150px]">
                 <div>
                     <a href="/home" className="text-black no-underline flex items-center">
                         <i className="fa-solid fa-house-chimney"></i>
-                        <span className="ml-1">Trang chủ |</span>
+                        <span>Trang chủ |</span>
                     </a>
                 </div>
                 <span className="ml-[10px]">Phụ kiện</span>

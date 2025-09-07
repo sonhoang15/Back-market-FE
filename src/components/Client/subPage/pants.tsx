@@ -69,7 +69,7 @@ function Pants() {
     return (
         <>
             {/* Tiêu đề */}
-            <div className="flex ml-[45px] mt-[10px]">
+            <div className="flex ml-[45px] mt-[150px]">
                 <div className="back">
                     <a href="/home" className="no-underline text-black">
                         <i className="fa-solid fa-house-chimney"></i>

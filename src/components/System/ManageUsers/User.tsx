@@ -4,6 +4,7 @@ import ReactPaginate from 'react-paginate';
 import { toast } from 'react-toastify';
 import ModalDelete from './ModalDelete';
 import ModalUser from './ModalUser';
+import { FaPencilAlt, FaTrash } from "react-icons/fa";
 
 // Kiểu dữ liệu Group
 interface Group {
@@ -99,103 +100,113 @@ const User: React.FC = () => {
 
     return (
         <>
-            <div className="container">
-                <div className="manage-user-container">
-                    <div className="user-header">
-                        <div className="title mt-3">
-                            <h3>Manager User</h3>
+            <div className="max-w-7xl mx-auto mt-11 px-4">
+                <div className="bg-white shadow rounded-lg p-4">
+                    {/* Header */}
+                    <div className="flex flex-col sm:flex-row justify-between items-center border-b pb-4">
+                        <div className="title mt-3 sm:mt-0">
+                            <h3 className="text-xl font-semibold text-gray-800">Manager User</h3>
                         </div>
-                        <div className="user-actions my-3">
+                        <div className="flex gap-3 mt-3 sm:mt-0">
                             <button
-                                className="btn btn-success refresh mr-[10px]"
+                                className="flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
                                 onClick={handleRefresh}
                             >
-                                <i className="fa fa-refresh pr-[7px]"></i> refresh
+                                <i className="fa fa-refresh pr-2"></i> Refresh
                             </button>
                             <button
-                                className="btn btn-primary"
+                                className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                                 onClick={() => {
                                     setShowModalUser(true);
                                     setActionModalUser("CREATE");
                                 }}
                             >
-                                <i className="fa fa-plus pr-[7px]"></i> Add User
+                                <i className="fa fa-plus pr-2"></i> Add User
                             </button>
                         </div>
                     </div>
 
-                    <div className="user-table">
-                        <div className="table">
-                            <table className="table table-hover table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">No</th>
-                                        <th scope="col">Email</th>
-                                        <th scope="col">User name</th>
-                                        <th scope="col">Group</th>
-                                        <th scope="col">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {listUser.length > 0 ? (
-                                        listUser.map((item, index) => (
-                                            <tr key={`user-${index}`}>
-                                                <th>{(itemOffset - 1) * itemLimit + index + 1}</th>
-                                                <td>{item.email}</td>
-                                                <td>{item.username}</td>
-                                                <td>{item.Group?.name ?? 'N/A'}</td>
-                                                <td>
-                                                    <span
-                                                        className="edit text-orange-500 cursor-pointer pr-[10px]"
+                    {/* Table */}
+                    <div className="overflow-x-auto mt-4">
+                        <table className="w-full text-left border border-gray-200 rounded-lg">
+                            <thead className="bg-gray-100">
+                                <tr>
+                                    <th className="px-4 py-2 border">No</th>
+                                    <th className="px-4 py-2 border">Email</th>
+                                    <th className="px-4 py-2 border">User name</th>
+                                    <th className="px-4 py-2 border">Group</th>
+                                    <th className="px-4 py-2 border">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {listUser.length > 0 ? (
+                                    listUser.map((item, index) => (
+                                        <tr
+                                            key={`user-${index}`}
+                                            className="hover:bg-gray-50 transition"
+                                        >
+                                            <td className="px-4 py-2 border">
+                                                {(itemOffset - 1) * itemLimit + index + 1}
+                                            </td>
+                                            <td className="px-4 py-2 border">{item.email}</td>
+                                            <td className="px-4 py-2 border">{item.username}</td>
+                                            <td className="px-4 py-2 border">
+                                                {item.Group?.name ?? "N/A"}
+                                            </td>
+                                            <td className="px-4 py-2 border">
+                                                <div className="flex items-center space-x-3">
+                                                    <FaPencilAlt
+                                                        className="text-orange-500 cursor-pointer hover:text-orange-600"
                                                         onClick={() => handleEditUser(item)}
-                                                    >
-                                                        <i className="fa fa-pencil"></i>
-                                                    </span>
-                                                    <span
-                                                        className="delete text-red-500 cursor-pointer"
+                                                    />
+                                                    <FaTrash
+                                                        className="text-red-500 cursor-pointer hover:text-red-600"
                                                         onClick={() => handleDeleteUser(item)}
-                                                    >
-                                                        <i className="fa fa-trash"></i>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td colSpan={5}><span>Not found user</span></td>
+                                                    />
+                                                </div>
+                                            </td>
                                         </tr>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan={5} className="text-center py-4">
+                                            <span className="text-gray-500">Not found user</span>
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
                     </div>
 
-                    {pageCount > 0 && (
-                        <div className="footer">
-                            <ReactPaginate
-                                nextLabel="next >"
-                                onPageChange={handlePageClick}
-                                pageRangeDisplayed={3}
-                                marginPagesDisplayed={2}
-                                pageCount={pageCount}
-                                previousLabel="< previous"
-                                pageClassName="page-item"
-                                pageLinkClassName="page-link"
-                                previousClassName="page-item"
-                                previousLinkClassName="page-link"
-                                nextClassName="page-item"
-                                nextLinkClassName="page-link"
-                                breakLabel="..."
-                                breakClassName="page-item"
-                                breakLinkClassName="page-link"
-                                containerClassName="pagination"
-                                activeClassName="active"
-                                renderOnZeroPageCount={null}
-                            />
-                        </div>
-                    )}
+
                 </div>
-            </div>
+                <div className="mt-4 flex justify-center">
+                    <ReactPaginate
+                        nextLabel="next >"
+                        previousLabel="< previous"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={3}
+                        marginPagesDisplayed={2}
+                        pageCount={pageCount}
+                        containerClassName="flex space-x-2"
+
+                        pageClassName="inline-block"
+                        pageLinkClassName="px-3 py-1 border rounded-md cursor-pointer hover:bg-gray-100"
+
+                        previousClassName="inline-block"
+                        previousLinkClassName="px-3 py-1 border rounded-md cursor-pointer hover:bg-gray-100"
+
+                        nextClassName="inline-block"
+                        nextLinkClassName="px-3 py-1 border rounded-md cursor-pointer hover:bg-gray-100"
+
+                        breakClassName="inline-block"
+                        breakLinkClassName="px-3 py-1 border rounded-md"
+
+                        activeLinkClassName="bg-blue-500 text-white border-blue-500"
+                        disabledLinkClassName="opacity-50 cursor-not-allowed"
+                    />
+                </div>
+            </div >
 
             {userToDelete && (
                 <ModalDelete
@@ -204,7 +215,8 @@ const User: React.FC = () => {
                     ConfirmDelete={ConfirmDelete}
                     userToDelete={userToDelete} // lúc này chắc chắn không null
                 />
-            )}
+            )
+            }
             <ModalUser
                 Title={'Create new user'}
                 hide={onHideModalUser}

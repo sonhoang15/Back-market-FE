@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { ShoppingCart, X, Plus, Minus, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import img1 from "../../../assets/anh/103.jpeg";
+import img2 from "../../../assets/anh/104.jpeg";
 
 const CartSidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     // Demo sản phẩm trong giỏ hàng
     const [cartItems, setCartItems] = useState([
-        { id: 1, name: "Áo thun nam", price: 200000, quantity: 2, image: "https://via.placeholder.com/60" },
-        { id: 2, name: "Quần jeans nữ", price: 350000, quantity: 1, image: "https://via.placeholder.com/60" },
+        { id: 1, name: "Áo thun nam", price: 200000, quantity: 2, image: img1 },
+        { id: 2, name: "Quần jeans nữ", price: 350000, quantity: 1, image: img2 },
     ]);
 
     //  Hàm tăng số lượng

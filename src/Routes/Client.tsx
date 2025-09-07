@@ -8,7 +8,7 @@ const Home: React.FC = () => {
     // Giả sử user có isAuthenticated: boolean
     const isLoggedIn = user?.isAuthenticated;
 
-    const linkToRedirect = isLoggedIn ? '/system/user' : '/home';
+    const linkToRedirect = isLoggedIn ? '/system' : '/home';
 
     return <Navigate to={linkToRedirect} replace />;
 };

@@ -75,6 +75,8 @@ const GroupRole: React.FC = () => {
             if (data && +data.EC === 0) {
                 let result = buildDataRoleByGroup(data.DT.Roles, listRoles);
                 setAssignRoleByGroup(result);
+            } else {
+                setAssignRoleByGroup([]); // luôn set default mảng
             }
         }
     };
@@ -106,12 +108,13 @@ const GroupRole: React.FC = () => {
         const assignedRoles = assignRoleByGroup.filter(role => role.isAssigned);
         return {
             groupId: Number(selectGroup),
-            roleIds: assignedRoles.map(role => role.id)
+            roleId: assignedRoles.map(role => role.id)
         };
     };
 
     const handleSave = async () => {
         let data = buildDataToSave();
+        console.log("Payload to send:", data);
         let res: ApiResponse<null> = await assignToGroup(data);
         if (res && res.EC === 0) {
             toast.success(res.EM);
@@ -121,50 +124,65 @@ const GroupRole: React.FC = () => {
     };
 
     return (
-        <div className='group-role-container'>
-            <div className='container mt-3'>
-                <h4>Group Roles:</h4>
-                <div className='assign-group-role'>
-                    <div className='col-12 col-sm-6 form-group'>
-                        <label> Select Group:</label>
+        <div className="group-role-container">
+            <div className="container mt-3 mx-auto">
+                <h4 className="text-lg font-semibold mb-3">Group Roles:</h4>
+                <div className="assign-group-role">
+                    <div className="w-full sm:w-1/2 mb-4">
+                        <label className="block mb-2 font-medium">Select Group:</label>
                         <select
-                            className='form-select'
+                            className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             onChange={(event) => handleOnchangeGroup(event.target.value)}
                         >
-                            <option value=''>Select your group</option>
-                            {userGroups && userGroups.length > 0 &&
+                            <option value="">Select your group</option>
+                            {userGroups &&
+                                userGroups.length > 0 &&
                                 userGroups.map((item, index) => (
-                                    <option key={`group-${index}`} value={item.id}>{item.name}</option>
-                                ))
-                            }
+                                    <option key={`group-${index}`} value={item.id}>
+                                        {item.name}
+                                    </option>
+                                ))}
                         </select>
                     </div>
-                    <hr />
-                    {selectGroup &&
-                        <div className='roles'>
-                            <h5>Assign Roles:</h5>
-                            {assignRoleByGroup && assignRoleByGroup.length > 0 &&
+
+                    <hr className="my-4 border-gray-300" />
+
+                    {selectGroup && (
+                        <div className="roles">
+                            <h5 className="text-md font-semibold mb-3">Assign Roles:</h5>
+                            {assignRoleByGroup &&
+                                assignRoleByGroup.length > 0 &&
                                 assignRoleByGroup.map((item, index) => (
-                                    <div className="form-check" key={`list-role-${index}`}>
+                                    <div
+                                        className="flex items-center mb-2 space-x-2"
+                                        key={`list-role-${index}`}
+                                    >
                                         <input
-                                            className="form-check-input"
+                                            className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                                             type="checkbox"
                                             value={item.id}
                                             id={`list-role-${index}`}
                                             checked={item.isAssigned}
                                             onChange={(event) => handleSelectRoles(event.target.value)}
                                         />
-                                        <label className="form-check-label" htmlFor={`list-role-${index}`}>
+                                        <label
+                                            className="text-gray-700"
+                                            htmlFor={`list-role-${index}`}
+                                        >
                                             {item.url}
                                         </label>
                                     </div>
-                                ))
-                            }
-                            <div className='mt-3'>
-                                <button className='btn btn-warning' onClick={handleSave}>Save</button>
+                                ))}
+                            <div className="mt-4">
+                                <button
+                                    className="bg-yellow-500 hover:bg-yellow-600 text-white font-medium px-4 py-2 rounded-md"
+                                    onClick={handleSave}
+                                >
+                                    Save
+                                </button>
                             </div>
                         </div>
-                    }
+                    )}
                 </div>
             </div>
         </div>

@@ -7,7 +7,7 @@ const HeroSection = () => {
       <img
         src={banner}
         alt=""
-        className="w-full h-auto object-cover md:h-[400px] lg:h-[970px]"
+        className="w-full h-auto object-cover md:h-[400px] lg:h-[1060px]"
       />
     </div>
   );

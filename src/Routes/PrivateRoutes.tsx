@@ -5,7 +5,7 @@ import { UserContext } from '../context/UserContext';
 const PrivateRoutes: React.FC = () => {
     const { user } = useContext(UserContext)!;
 
-    return user && user.isAuthenticated === true ? <Outlet /> : <Navigate to="/login" />;
+    return user && user.isAuthenticated === true ? <Outlet /> : <Navigate to="/auth" replace />;
 };
 
 export default PrivateRoutes;

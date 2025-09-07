@@ -43,7 +43,7 @@ function ProductDetail() {
     };
 
     return (
-        <section className="w-full px-10 mt-[60px]">
+        <section className="w-full px-10 mt-[150px]">
             {/* Breadcrumb */}
             <div className="flex py-5 text-sm">
                 <a href="index.html" className="px-5 text-gray-700">
