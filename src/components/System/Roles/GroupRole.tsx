@@ -7,7 +7,6 @@ import { AssignToGroupData } from '../../../Services/roleService';
 
 import _ from 'lodash';
 
-// ==== Interfaces ====
 interface Group {
     id: number;
     name: string;
@@ -32,11 +31,6 @@ interface ApiResponse<T> {
 
 interface RoleByGroupResponse {
     Roles: Role[];
-}
-
-interface AssignRolePayload {
-    groupId: number;
-    groupRoles: { groupId: number; roleId: number }[];
 }
 
 const GroupRole: React.FC = () => {
@@ -138,14 +132,12 @@ const GroupRole: React.FC = () => {
                 name: newGroupName,
                 description: newGroupDesc,
             });
-            // console.log("EC kiểu dữ liệu:", typeof res.data.EC, res.data.EC);
-            const responseData = res.data ?? res; // nếu res.data có, dùng res.data, nếu không dùng res
+
+            const responseData = res.data ?? res;
 
             if (responseData && +responseData.EC === 0) {
-                // thêm đúng group mới vào danh sách
                 setUserGroups([...userGroups, responseData.DT]);
 
-                // reset form
                 setNewGroupName("");
                 setNewGroupDesc("");
                 setGroupError("");
@@ -165,20 +157,34 @@ const GroupRole: React.FC = () => {
         if (!window.confirm("Bạn có chắc chắn muốn xóa group này?")) return;
 
         try {
-            const res = await deleteGroup(id); // res: ApiResponse
-            console.log("res nhận về từ API:", res, typeof res.EC);
-            if (res && res.EC === 0) {
-                toast.success(res.EM);
-                setUserGroups(userGroups.filter(group => group.id !== id));
+            if (!id) {
+                toast.error("GroupId không hợp lệ!");
+                return;
+            }
+
+            const res = await deleteGroup({ id });
+
+            if (!res) {
+                toast.error("Không nhận được phản hồi từ server!");
+                return;
+            }
+
+            // ép kiểu EC an toàn
+            const ecNumber = Number(res.EC);
+
+            if (!isNaN(ecNumber) && ecNumber === 0) {
+                // xóa thành công → cập nhật state userGroups
+                setUserGroups(prev => prev.filter(group => group.id !== id));
+                toast.success(res.EM || "Xóa group thành công!");
             } else {
-                toast.error(res?.EM || "Có lỗi xảy ra!");
+                // xóa thất bại → hiển thị thông báo lỗi từ backend
+                toast.error(res.EM || "Không thể xóa group!");
             }
         } catch (err) {
             console.error("Lỗi khi xóa group:", err);
             toast.error("Không thể xóa group, thử lại sau!");
         }
     };
-
 
     return (
         <div className="group-role-container">
