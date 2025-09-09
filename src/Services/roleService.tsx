@@ -20,7 +20,13 @@ interface RoleData {
 
 export interface AssignToGroupData {
     groupId: number;
-    roleId: number[];  // giữ nguyên interface frontend
+    roleId: number[];
+}
+
+export interface ApiResponse<T = any> {
+    EC: number;
+    EM: string;
+    DT: T | null;
 }
 
 //Tạo danh sách role
@@ -58,11 +64,23 @@ const assignToGroup = (data: AssignToGroupData): Promise<any> => {
     return axios.post('/api/v1/role/assign-to-group', payload);
 };
 
+const createGroup = (data: { name: string; description: string }) => {
+    return axios.post("/api/v1/group/create", data);
+};
+
+const deleteGroup = async (groupId: number): Promise<ApiResponse> => {
+    const res = await axios.delete("/api/v1/group/delete", {
+        data: { id: groupId },
+    });
+    return res.data; // ✅ unwrap ở đây
+};
 export {
+    createGroup,
     createRoles,
     fetchAllRole,
     deleteRole,
     fetchRoleByGroup,
     assignToGroup,
-    updateUser
+    updateUser,
+    deleteGroup
 };

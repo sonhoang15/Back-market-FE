@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchGroups } from '../../../Services/userService';
 import { toast } from 'react-toastify';
-import { fetchAllRole, fetchRoleByGroup, assignToGroup } from '../../../Services/roleService';
+import { fetchAllRole, fetchRoleByGroup, assignToGroup, createGroup, deleteGroup } from '../../../Services/roleService';
 import { AssignToGroupData } from '../../../Services/roleService';
 
 
@@ -11,6 +11,7 @@ import _ from 'lodash';
 interface Group {
     id: number;
     name: string;
+    description: string;
 }
 
 interface Role {
@@ -43,6 +44,9 @@ const GroupRole: React.FC = () => {
     const [listRoles, setListRoles] = useState<Role[]>([]);
     const [selectGroup, setSelectGroup] = useState<number | ''>('');
     const [assignRoleByGroup, setAssignRoleByGroup] = useState<RoleWithAssign[]>([]);
+    const [newGroupName, setNewGroupName] = useState("");
+    const [newGroupDesc, setNewGroupDesc] = useState("");
+    const [groupError, setGroupError] = useState("");
 
     useEffect(() => {
         getGroups();
@@ -123,11 +127,110 @@ const GroupRole: React.FC = () => {
         }
     };
 
+    const handleCreateGroup = async () => {
+        if (!newGroupName.trim()) {
+            setGroupError("Group name is required");
+            return;
+        }
+
+        try {
+            const res = await createGroup({
+                name: newGroupName,
+                description: newGroupDesc,
+            });
+            // console.log("EC kiểu dữ liệu:", typeof res.data.EC, res.data.EC);
+            const responseData = res.data ?? res; // nếu res.data có, dùng res.data, nếu không dùng res
+
+            if (responseData && +responseData.EC === 0) {
+                // thêm đúng group mới vào danh sách
+                setUserGroups([...userGroups, responseData.DT]);
+
+                // reset form
+                setNewGroupName("");
+                setNewGroupDesc("");
+                setGroupError("");
+
+                toast.success(responseData.EM || "Group created successfully!");
+            } else {
+                setGroupError(responseData?.EM || "Không thể tạo group!");
+            }
+        } catch (err) {
+            console.error("Lỗi khi tạo group:", err);
+            setGroupError("Không thể tạo group, thử lại sau!");
+        }
+    };
+
+
+    const handleDeleteGroup = async (id: number) => {
+        if (!window.confirm("Bạn có chắc chắn muốn xóa group này?")) return;
+
+        try {
+            const res = await deleteGroup(id); // res: ApiResponse
+            console.log("res nhận về từ API:", res, typeof res.EC);
+            if (res && res.EC === 0) {
+                toast.success(res.EM);
+                setUserGroups(userGroups.filter(group => group.id !== id));
+            } else {
+                toast.error(res?.EM || "Có lỗi xảy ra!");
+            }
+        } catch (err) {
+            console.error("Lỗi khi xóa group:", err);
+            toast.error("Không thể xóa group, thử lại sau!");
+        }
+    };
+
+
     return (
         <div className="group-role-container">
             <div className="container mt-3 mx-auto">
                 <h4 className="text-lg font-semibold mb-3">Group Roles:</h4>
                 <div className="assign-group-role">
+                    <div className="w-full sm:w-1/2 mb-6">
+                        <h5 className="text-md font-semibold mb-2">Create New Group</h5>
+
+                        <input
+                            type="text"
+                            placeholder="Group name *"
+                            value={newGroupName}
+                            onChange={(e) => {
+                                setNewGroupName(e.target.value);
+                                if (e.target.value.trim()) setGroupError("");
+                            }}
+                            className={`w-full border p-2 rounded mb-2 ${groupError ? "border-red-500" : "border-gray-300"
+                                }`}
+                        />
+                        {groupError && <p className="text-red-500 text-sm mb-2">{groupError}</p>}
+
+                        <textarea
+                            placeholder="Description"
+                            value={newGroupDesc}
+                            onChange={(e) => setNewGroupDesc(e.target.value)}
+                            className="w-full border p-2 rounded mb-2 border-gray-300"
+                            rows={2}
+                        />
+
+                        <button
+                            onClick={handleCreateGroup}
+                            type="button"
+                            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+                        >
+                            + Add Group
+                        </button>
+                    </div>
+                    {userGroups.map(group => (
+                        <div key={group.id} className="flex justify-between items-center border p-2 mb-2 rounded">
+                            <div>
+                                <p className="font-semibold">{group.name}</p>
+                                <p className="text-sm text-gray-500">{group.description}</p>
+                            </div>
+                            <button
+                                onClick={() => handleDeleteGroup(group.id)}
+                                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    ))}
                     <div className="w-full sm:w-1/2 mb-4">
                         <label className="block mb-2 font-medium">Select Group:</label>
                         <select
@@ -144,7 +247,6 @@ const GroupRole: React.FC = () => {
                                 ))}
                         </select>
                     </div>
-
                     <hr className="my-4 border-gray-300" />
 
                     {selectGroup && (

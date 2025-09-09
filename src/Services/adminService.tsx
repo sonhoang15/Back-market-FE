@@ -16,25 +16,13 @@ export interface ProductData {
 }
 
 //  Tạo sản phẩm mới (có ảnh -> multipart/form-data)
-const createProduct = (product: ProductData): Promise<any> => {
-    const formData = new FormData();
-    formData.append("name", product.name);
-    formData.append("price", String(product.price));
-    formData.append("quantity", String(product.quantity));
-    formData.append("size", product.size);
-    formData.append("color", product.color);
-    formData.append("description", product.description);
-    formData.append("active", String(product.active));
-
-    if (product.image instanceof File) {
-        formData.append("image", product.image);
-    }
-
-    return axios.post("/api/v1/product/create", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+const createProduct = (data: FormData): Promise<any> => {
+    return axios.post("/api/v1/product/create", data, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
     });
 };
-
 //  Lấy tất cả sản phẩm (có thể thêm phân trang/filter sau)
 const fetchAllProducts = (): Promise<any> => {
     return axios.get("/api/v1/product/read");

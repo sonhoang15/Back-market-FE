@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { fetchCategories } from "../../../Services/adminService";
+import { createProduct } from "../../../Services/adminService";
 
 interface Category {
     id: number;
@@ -21,14 +22,14 @@ interface ProductFormData {
 export default function AddProduct() {
     const [formData, setFormData] = useState<ProductFormData>({
         name: "",
-        price: 0,
-        quantity: 0,
+        price: "",
+        quantity: "",
         size: "",
         color: "",
         description: "",
         image: null,
         active: true,
-        categoryId: 0, // mặc định rỗng
+        categoryId: 0,
     });
 
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -38,25 +39,28 @@ export default function AddProduct() {
 
 
     // Lấy danh mục từ backend
-    useEffect(() => {
-        const loadCategories = async () => {
-            try {
-                const res = await fetchCategories();
-                setCategories(res.data);
-            } catch (err) {
-                console.error("Lỗi khi load category:", err);
-            }
-        };
-        fetchCategories();
-    }, []);
-
+    // useEffect(() => {
+    //     const loadCategories = async () => {
+    //         try {
+    //             const res = await fetchCategories();
+    //             setCategories(res.data);
+    //         } catch (err) {
+    //             console.error("Lỗi khi load category:", err);
+    //         }
+    //     };
+    //     fetchCategories();
+    // }, []);
     const handleInputChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
     ) => {
         const { name, value } = e.target;
+
         setFormData((prev) => ({
             ...prev,
-            [name]: value,
+            [name]:
+                name === "price" || name === "quantity"
+                    ? value === "" ? "" : Number(value)
+                    : value,
         }));
     };
 
@@ -80,17 +84,38 @@ export default function AddProduct() {
         return newErrors;
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             return;
         }
-        console.log("Product submitted:", formData);
-        alert("Thêm sản phẩm thành công!");
-    };
 
+        try {
+            const formDataToSend = new FormData();
+            formDataToSend.append("name", formData.name);
+            formDataToSend.append("price", String(formData.price));
+            formDataToSend.append("quantity", String(formData.quantity));
+            formDataToSend.append("size", formData.size);
+            formDataToSend.append("color", formData.color);
+            formDataToSend.append("description", formData.description);
+            formDataToSend.append("active", String(formData.active));
+            formDataToSend.append("categoryId", String(formData.categoryId));
+
+            if (formData.image) {
+                formDataToSend.append("image", formData.image);
+            }
+
+            const res = await createProduct(formDataToSend);
+
+            console.log("Product created:", res.data);
+            alert("Thêm sản phẩm thành công!");
+        } catch (error) {
+            console.error("Lỗi khi thêm sản phẩm:", error);
+            alert("Thêm sản phẩm thất bại!");
+        }
+    };
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             setFormData((prev) => ({
@@ -149,7 +174,6 @@ export default function AddProduct() {
                     <label className="block font-medium">Danh mục *</label>
                     <select
                         name="categoryId"
-                        className="w-full border p-2 rounded"
                         value={formData.categoryId}
                         onChange={(e) => {
                             const value = e.target.value;
@@ -157,10 +181,14 @@ export default function AddProduct() {
                                 setShowNewCategory(true);
                             } else {
                                 setShowNewCategory(false);
-                                handleInputChange(e);
+                                setFormData(prev => ({
+                                    ...prev,
+                                    categoryId: Number(value),
+                                }));
                             }
                         }}
                     >
+
                         <option value="">-- Chọn danh mục --</option>
                         {categories.map((cat) => (
                             <option key={cat.id} value={cat.id}>

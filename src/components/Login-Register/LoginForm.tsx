@@ -55,7 +55,7 @@ const SignInForm = () => {
                 loginContext(data);
 
                 // Điều hướng theo groupWithRoles
-                if (groupWithRoles.groupId === "1") {
+                if (groupWithRoles.groupId === 2) {
                     navigate("/system");
                 } else {
                     navigate("/home");
