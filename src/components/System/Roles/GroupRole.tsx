@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { fetchGroups } from '../../../Services/userService';
 import { toast } from 'react-toastify';
-import { fetchAllRole, fetchRoleByGroup, assignToGroup, createGroup, deleteGroup } from '../../../Services/roleService';
+import { fetchAllRole, fetchRoleByGroup, assignToGroup, deleteGroup } from '../../../Services/roleService';
 import { AssignToGroupData } from '../../../Services/roleService';
-
+import ModalCreateGroup from './ModalCreateGroup';
 
 import _ from 'lodash';
 
@@ -38,9 +38,9 @@ const GroupRole: React.FC = () => {
     const [listRoles, setListRoles] = useState<Role[]>([]);
     const [selectGroup, setSelectGroup] = useState<number | ''>('');
     const [assignRoleByGroup, setAssignRoleByGroup] = useState<RoleWithAssign[]>([]);
-    const [newGroupName, setNewGroupName] = useState("");
-    const [newGroupDesc, setNewGroupDesc] = useState("");
-    const [groupError, setGroupError] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [groups, setGroups] = useState<any[]>([]);
+
 
     useEffect(() => {
         getGroups();
@@ -121,36 +121,6 @@ const GroupRole: React.FC = () => {
         }
     };
 
-    const handleCreateGroup = async () => {
-        if (!newGroupName.trim()) {
-            setGroupError("Group name is required");
-            return;
-        }
-
-        try {
-            const res = await createGroup({
-                name: newGroupName,
-                description: newGroupDesc,
-            });
-
-            const responseData = res.data ?? res;
-
-            if (responseData && +responseData.EC === 0) {
-                setUserGroups([...userGroups, responseData.DT]);
-
-                setNewGroupName("");
-                setNewGroupDesc("");
-                setGroupError("");
-
-                toast.success(responseData.EM || "Group created successfully!");
-            } else {
-                setGroupError(responseData?.EM || "Không thể tạo group!");
-            }
-        } catch (err) {
-            console.error("Lỗi khi tạo group:", err);
-            setGroupError("Không thể tạo group, thử lại sau!");
-        }
-    };
 
 
     const handleDeleteGroup = async (id: number) => {
@@ -189,40 +159,25 @@ const GroupRole: React.FC = () => {
     return (
         <div className="group-role-container">
             <div className="container mt-3 mx-auto">
-                <h4 className="text-lg font-semibold mb-3">Group Roles:</h4>
-                <div className="assign-group-role">
-                    <div className="w-full sm:w-1/2 mb-6">
-                        <h5 className="text-md font-semibold mb-2">Create New Group</h5>
-
-                        <input
-                            type="text"
-                            placeholder="Group name *"
-                            value={newGroupName}
-                            onChange={(e) => {
-                                setNewGroupName(e.target.value);
-                                if (e.target.value.trim()) setGroupError("");
-                            }}
-                            className={`w-full border p-2 rounded mb-2 ${groupError ? "border-red-500" : "border-gray-300"
-                                }`}
-                        />
-                        {groupError && <p className="text-red-500 text-sm mb-2">{groupError}</p>}
-
-                        <textarea
-                            placeholder="Description"
-                            value={newGroupDesc}
-                            onChange={(e) => setNewGroupDesc(e.target.value)}
-                            className="w-full border p-2 rounded mb-2 border-gray-300"
-                            rows={2}
-                        />
-
+                <div className="p-4">
+                    <div className="flex justify-between items-center mb-4">
                         <button
-                            onClick={handleCreateGroup}
-                            type="button"
-                            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+                            onClick={() => setIsModalOpen(true)}
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
                         >
                             + Add Group
                         </button>
                     </div>
+
+                    {/* modal */}
+                    <ModalCreateGroup
+                        isOpen={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        onCreated={(newGroup) => setGroups([...groups, newGroup])}
+                    />
+                </div>
+                <h4 className="text-lg font-semibold mb-3">Group Roles:</h4>
+                <div className="assign-group-role">
                     {userGroups.map(group => (
                         <div key={group.id} className="flex justify-between items-center border p-2 mb-2 rounded">
                             <div>
