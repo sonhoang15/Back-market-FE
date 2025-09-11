@@ -54,9 +54,14 @@ const updateProduct = (product: ProductData): Promise<any> => {
     });
 };
 
-const fetchCategories = (): Promise<any> => {
-    return axios.get("/api/v1/category/read");
-}
+const createCategory = (name: string) => {
+    return axios.post("/api/v1/category/create", { name });
+};
+
+// API lấy tất cả category
+const fetchCategories = () => {
+    return axios.get("/api/v1/categories");
+};
 
 export {
     fetchCategories,
@@ -64,5 +69,6 @@ export {
     fetchAllProducts,
     deleteProduct,
     updateProduct,
+    createCategory,
 };
 

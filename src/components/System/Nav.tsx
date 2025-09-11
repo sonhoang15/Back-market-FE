@@ -114,6 +114,15 @@ const NavHeader: React.FC = () => {
                     >
                         Add product
                     </NavLink>
+                    <NavLink
+                        to="/system/category"
+                        className={({ isActive }) =>
+                            `px-3 py-1 border border-gray-700 rounded hover:bg-gray-800 ${isActive ? "bg-gray-800 text-white" : ""
+                            }`
+                        }
+                    >
+                        Category
+                    </NavLink>
                 </nav>
 
 
@@ -158,16 +167,7 @@ const NavHeader: React.FC = () => {
             {isMenuOpen && (
                 <nav className="lg:hidden bg-gray-800 text-white px-4 py-3 space-y-3">
                     <NavLink
-                        to="/"
-                        onClick={() => setIsMenuOpen(false)}
-                        className={({ isActive }) =>
-                            "block nav-link menus " + (isActive ? "font-semibold underline" : "")
-                        }
-                    >
-                        Home
-                    </NavLink>
-                    <NavLink
-                        to="/users"
+                        to="/system/user"
                         onClick={() => setIsMenuOpen(false)}
                         className={({ isActive }) =>
                             "block nav-link menus " + (isActive ? "font-semibold underline" : "")
@@ -176,7 +176,7 @@ const NavHeader: React.FC = () => {
                         User
                     </NavLink>
                     <NavLink
-                        to="/roles"
+                        to="/system/roles"
                         onClick={() => setIsMenuOpen(false)}
                         className={({ isActive }) =>
                             "block nav-link menus " + (isActive ? "font-semibold underline" : "")
@@ -185,7 +185,7 @@ const NavHeader: React.FC = () => {
                         Roles
                     </NavLink>
                     <NavLink
-                        to="/group-role"
+                        to="/system/group-role"
                         onClick={() => setIsMenuOpen(false)}
                         className={({ isActive }) =>
                             "block nav-link menus " + (isActive ? "font-semibold underline" : "")
@@ -194,13 +194,23 @@ const NavHeader: React.FC = () => {
                         Group roles
                     </NavLink>
                     <NavLink
-                        to="/about"
+                        to="/system/add-product"
                         onClick={() => setIsMenuOpen(false)}
                         className={({ isActive }) =>
                             "block nav-link menus " + (isActive ? "font-semibold underline" : "")
                         }
                     >
-                        About
+                        Add product
+                    </NavLink>
+
+                    <NavLink
+                        to="/system/category"
+                        onClick={() => setIsMenuOpen(false)}
+                        className={({ isActive }) =>
+                            "block nav-link menus " + (isActive ? "font-semibold underline" : "")
+                        }
+                    >
+                        category
                     </NavLink>
 
                     <div className="border-t border-gray-700 pt-3">

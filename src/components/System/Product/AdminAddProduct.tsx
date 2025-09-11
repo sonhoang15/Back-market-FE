@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchCategories } from "../../../Services/adminService";
-import { createProduct } from "../../../Services/adminService";
+import { createProduct, fetchCategories } from "../../../Services/adminService";
 
 interface Category {
     id: number;
@@ -16,7 +15,7 @@ interface ProductFormData {
     description: string;
     image: File | null;
     active: boolean;
-    categoryId: number; // 👈 thêm categoryId
+    categoryId: number | ""; // 👈 thêm categoryId
 }
 
 export default function AddProduct() {
@@ -34,22 +33,19 @@ export default function AddProduct() {
 
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [categories, setCategories] = useState<Category[]>([]);
-    const [showNewCategory, setShowNewCategory] = useState(false);
-    const [newCategory, setNewCategory] = useState("");
 
 
-    // Lấy danh mục từ backend
-    // useEffect(() => {
-    //     const loadCategories = async () => {
-    //         try {
-    //             const res = await fetchCategories();
-    //             setCategories(res.data);
-    //         } catch (err) {
-    //             console.error("Lỗi khi load category:", err);
-    //         }
-    //     };
-    //     fetchCategories();
-    // }, []);
+    useEffect(() => {
+        const loadCategories = async () => {
+            try {
+                const res = await fetchCategories();
+                setCategories(res.data);
+            } catch (err) {
+                console.error("Error fetching categories:", err);
+            }
+        };
+        loadCategories();
+    }, []);
     const handleInputChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
     ) => {
@@ -124,7 +120,13 @@ export default function AddProduct() {
             }));
         }
     };
-
+    const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setFormData((prev) => ({
+            ...prev,
+            categoryId: e.target.value ? Number(e.target.value) : "",
+        }));
+        setErrors((prev) => ({ ...prev, categoryId: "" }));
+    };
 
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-6">
@@ -175,54 +177,18 @@ export default function AddProduct() {
                     <select
                         name="categoryId"
                         value={formData.categoryId}
-                        onChange={(e) => {
-                            const value = e.target.value;
-                            if (value === "__new__") {
-                                setShowNewCategory(true);
-                            } else {
-                                setShowNewCategory(false);
-                                setFormData(prev => ({
-                                    ...prev,
-                                    categoryId: Number(value),
-                                }));
-                            }
-                        }}
+                        onChange={handleCategoryChange}
+                        className="border rounded p-2 w-full"
                     >
-
                         <option value="">-- Chọn danh mục --</option>
-                        {categories.map((cat) => (
-                            <option key={cat.id} value={cat.id}>
-                                {cat.name}
-                            </option>
-                        ))}
-                        <option value="__new__">+ Thêm danh mục mới</option>
+                        {Array.isArray(categories) && categories.length > 0 &&
+                            categories.map((cat) => (
+                                <option key={cat.id} value={cat.id}>
+                                    {cat.name}
+                                </option>
+                            ))
+                        }
                     </select>
-
-                    {showNewCategory && (
-                        <div className="mt-2 flex gap-2">
-                            <input
-                                type="text"
-                                placeholder="Tên danh mục mới"
-                                className="border p-2 rounded w-full"
-                                value={newCategory}
-                                onChange={(e) => setNewCategory(e.target.value)}
-                            />
-                            <button
-                                type="button"
-                                className="bg-blue-500 text-white px-3 rounded"
-                                onClick={() => {
-                                    if (!newCategory.trim()) return;
-                                    const newCat = { id: Date.now(), name: newCategory };
-                                    setCategories([...categories, newCat]);
-                                    setFormData({ ...formData, categoryId: newCat.id });
-                                    setShowNewCategory(false);
-                                    setNewCategory("");
-                                }}
-                            >
-                                Lưu
-                            </button>
-                        </div>
-                    )}
 
                     {errors.categoryId && (
                         <p className="text-red-500">{errors.categoryId}</p>

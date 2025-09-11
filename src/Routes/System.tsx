@@ -5,6 +5,8 @@ import GroupRole from '../components/System/Roles/GroupRole';
 import User from '../components/System/ManageUsers/User';
 import Header from '../components/System/Nav';
 import { UserState } from "../context/UserContext";
+import AdminAddProduct from '../components/System/Product/AdminAddProduct';
+import Category from '../components/System/Product/Category';
 
 interface User {
   isLoggedIn: boolean;
@@ -43,6 +45,8 @@ class System extends Component<SystemProps> {
               <Route path="user" element={<User />} />
               <Route path="group-role" element={<GroupRole />} />
               <Route path="roles" element={<Roles />} />
+              <Route path="add-product" element={<AdminAddProduct />} />
+              <Route path="category" element={<Category />} />
 
               {/* fallback khác: hiện 404 thay vì quay về /system */}
               <Route path="*" element={<div>Page not found in System</div>} />
