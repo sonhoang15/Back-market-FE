@@ -9,12 +9,12 @@ import ProductDetail from "../components/Client/subPage/productDetail";
 import User from "../components/System/ManageUsers/User";
 import GroupRole from "../components/System/Roles/GroupRole";
 import Roles from "../components/System/Roles/Roles";
-
 import ClientLayout from "../layouts/ClientLayout";
 import SystemLayout from "../layouts/SystemLayout";
 import { PublicRoute, AdminRoute, HomeRedirect } from "./RouteGuards";
-import AdminAddProduct from "../components/System/Product/AdminAddProduct";
-import Categories from "../components/System/Product/Category";
+import AdminAddProduct from "../components/System/ManagerProduct/AdminAddProduct";
+import Categories from "../components/System/ManagerProduct/Category";
+import { ProductPage } from "../components/System/ManagerProduct/Product";
 // bạn tách riêng mấy hàm PrivateRoute, PublicRoute, AdminRoute, HomeRedirect ra 1 file RouteGuards.tsx cho gọn
 
 export default function AppRoutes() {
@@ -55,6 +55,7 @@ export default function AppRoutes() {
                 <Route path="roles" element={<Roles />} />
                 <Route path="add-product" element={<AdminAddProduct />} />
                 <Route path="category" element={<Categories />} />
+                <Route path="product" element={<ProductPage />} />
                 <Route path="*" element={<div>Page not found in System</div>} />
             </Route>
 

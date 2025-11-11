@@ -15,60 +15,29 @@ export interface ProductData {
     updatedAt?: string;
 }
 
-//  Tạo sản phẩm mới (có ảnh -> multipart/form-data)
-const createProduct = (data: FormData): Promise<any> => {
-    return axios.post("/api/v1/product/create", data, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
-    });
-};
-//  Lấy tất cả sản phẩm (có thể thêm phân trang/filter sau)
-const fetchAllProducts = (): Promise<any> => {
-    return axios.get("/api/v1/product/read");
+
+
+
+const createCategory = async (name: string, parentId: number | null = null, description = '', source_type = 'manual') => {
+    return axios.post("/api/v1/category/create", { name, parentId, description, source_type });
 };
 
-//  Xoá 1 sản phẩm
-const deleteProduct = (id: number): Promise<any> => {
-    return axios.delete(`/api/v1/product/delete`, { data: { id } });
+const fetchCategories = async () => {
+    return await axios.get("/api/v1/category/read");
 };
 
-//  Cập nhật sản phẩm
-const updateProduct = (product: ProductData): Promise<any> => {
-    const formData = new FormData();
-    if (product.id) formData.append("id", String(product.id));
-    formData.append("name", product.name);
-    formData.append("price", String(product.price));
-    formData.append("quantity", String(product.quantity));
-    formData.append("size", product.size);
-    formData.append("color", product.color);
-    formData.append("description", product.description);
-    formData.append("active", String(product.active));
-
-    if (product.image instanceof File) {
-        formData.append("image", product.image);
-    }
-
-    return axios.put(`/api/v1/product/update`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-    });
+const updateCategory = async (id: number, name: string, parentId: number | null = null, description = '', source_type?: string) => {
+    return axios.put(`/api/v1/category/update/${id}`, { name, parentId, description, source_type });
 };
 
-const createCategory = (name: string) => {
-    return axios.post("/api/v1/category/create", { name });
-};
-
-// API lấy tất cả category
-const fetchCategories = () => {
-    return axios.get("/api/v1/categories");
-};
+const deleteCategory = (id: number) => {
+    return axios.delete(`/api/v1/category/delete/${id}`);
+}
 
 export {
+    updateCategory,
+    deleteCategory,
     fetchCategories,
-    createProduct,
-    fetchAllProducts,
-    deleteProduct,
-    updateProduct,
     createCategory,
 };
 

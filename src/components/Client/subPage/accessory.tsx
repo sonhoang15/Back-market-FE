@@ -1,71 +1,20 @@
-import img1 from "../../../assets/anh/6.jpeg";
-import img2 from "../../../assets/anh/7.jpeg";
-import img3 from "../../../assets/anh/8.jpeg";
-import img4 from "../../../assets/anh/9.jpeg";
-
+import { useState, useEffect } from "react";
 import ProductCard from "../productSection/ProductCard";
-
-
-const products = [
-    {
-        id: 1,
-        name: 'Dây Lưng Karik 0029',
-        price: '449.000₫',
-        img: img1,
-        thumbnails: [img1, img2],
-    },
-    {
-        id: 2,
-        name: 'Dây Lưng Karik 0028',
-        price: '449.000₫',
-        img: img2,
-        thumbnails: [img2, img3],
-    },
-    {
-        id: 3,
-        name: 'Dây Lưng Karik 0024',
-        price: '449.000₫',
-        img: img3,
-        thumbnails: [img3, img4],
-    },
-    {
-        id: 4,
-        name: 'Dây Lưng Karik 0027',
-        price: '449.000₫',
-        img: img4,
-        thumbnails: [img4, img1],
-    },
-    {
-        id: 5,
-        name: 'Dây Lưng Karik 0029',
-        price: '449.000₫',
-        img: img1,
-        thumbnails: [img1, img2],
-    },
-    {
-        id: 6,
-        name: 'Dây Lưng Karik 0028',
-        price: '449.000₫',
-        img: img2,
-        thumbnails: [img2, img3],
-    },
-    {
-        id: 7,
-        name: 'Dây Lưng Karik 0024',
-        price: '449.000₫',
-        img: img3,
-        thumbnails: [img3, img4],
-    },
-    {
-        id: 8,
-        name: 'Dây Lưng Karik 0027',
-        price: '449.000₫',
-        img: img4,
-        thumbnails: [img4, img1],
-    },
-];
+import { getProductsByCategory } from "../../../Services/clientSevice";
+import type { Product } from "../productSection/ProductCard";
 
 function Accessory() {
+    const [products, setProducts] = useState<Product[]>([]);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const data = await getProductsByCategory(3); // category_id = 3
+            setProducts(data);
+
+        };
+        fetchProducts();
+    }, []);
+
     return (
         <>
             <div className="flex ml-[45px] mt-[150px]">
@@ -164,13 +113,15 @@ function Accessory() {
 
 
                 <div className="flex items-center mt-[107px] mr-[50px]">
-                    <h5>Sắp xếp theo:</h5>
-                    <select className="ml-[20px] px-2 py-1 border rounded">
-                        <option>Mới nhất</option>
-                        <option>Giá giảm dần</option>
-                        <option>Giá tăng dần</option>
-                        <option>Sale</option>
-                    </select>
+                    <label className="flex items-center gap-2">
+                        <h5>Sắp xếp theo:</h5>
+                        <select className="ml-[20px] px-2 py-1 border rounded">
+                            <option>Mới nhất</option>
+                            <option>Giá giảm dần</option>
+                            <option>Giá tăng dần</option>
+                            <option>Sale</option>
+                        </select>
+                    </label>
                 </div>
             </div>
 

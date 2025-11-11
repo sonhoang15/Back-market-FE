@@ -152,6 +152,7 @@ const ModalUser: React.FC<ModalUserProps> = ({
                                 }`}
                             value={userData.email}
                             onChange={(e) => handleChange(e.target.value, "email")}
+                            title="Enter a valid email address"
                         />
                     </div>
 
@@ -166,6 +167,7 @@ const ModalUser: React.FC<ModalUserProps> = ({
                                 }`}
                             value={userData.username}
                             onChange={(e) => handleChange(e.target.value, "username")}
+                            title="Enter a valid username"
                         />
                     </div>
 
@@ -181,6 +183,7 @@ const ModalUser: React.FC<ModalUserProps> = ({
                                 }`}
                             value={userData.phone}
                             onChange={(e) => handleChange(e.target.value, "phone")}
+                            title="Enter a valid phone number"
                         />
                     </div>
 
@@ -196,6 +199,7 @@ const ModalUser: React.FC<ModalUserProps> = ({
                                     }`}
                                 value={userData.password}
                                 onChange={(e) => handleChange(e.target.value, "password")}
+                                title="Enter a valid password"
                             />
                         </div>
                     )}
@@ -211,6 +215,7 @@ const ModalUser: React.FC<ModalUserProps> = ({
                                 }`}
                             value={userData.address}
                             onChange={(e) => handleChange(e.target.value, "address")}
+                            title="Enter a valid address"
                         />
                     </div>
 
@@ -223,6 +228,7 @@ const ModalUser: React.FC<ModalUserProps> = ({
                                 : "border-red-500 focus:border-red-500 focus:ring focus:ring-red-200"
                                 }`}
                             onChange={(e) => handleChange(e.target.value, "group")}
+                            title="Select a group"
                             value={userData.group}
                         >
                             {groups.map((group, index) => (

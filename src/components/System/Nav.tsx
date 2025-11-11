@@ -123,6 +123,15 @@ const NavHeader: React.FC = () => {
                     >
                         Category
                     </NavLink>
+                    <NavLink
+                        to="/system/product"
+                        className={({ isActive }) =>
+                            `px-3 py-1 border border-gray-700 rounded hover:bg-gray-800 ${isActive ? "bg-gray-800 text-white" : ""
+                            }`
+                        }
+                    >
+                        Products
+                    </NavLink>
                 </nav>
 
 
