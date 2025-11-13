@@ -84,6 +84,10 @@ const fetchVariantsByProduct = (product_id: number): Promise<any> => {
     return axios.get(`/api/v1/variant/read/${product_id}`);
 };
 
+const getProductById = (product_id: number): Promise<any> => {
+    return axios.get(`/api/v1/product/read/${product_id}`);
+};
+
 const updateVariant = (variant: FormData | ProductVariantData): Promise<any> => {
     let formData: FormData;
     let variantId: number | string | undefined;
@@ -136,4 +140,5 @@ export {
     deleteVariant,
     createProduct,
     createVariant,
+    getProductById,
 };

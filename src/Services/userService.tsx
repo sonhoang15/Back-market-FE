@@ -77,10 +77,13 @@ const updateUser = (
 };
 
 // Lấy thông tin tài khoản
-const getUserAccount = (): Promise<any> => {
-    return axios.get(`/api/v1/account`);
+const getUserAccount = async (token?: string) => {
+    return axios.get("/api/v1/account", {
+        headers: {
+            Authorization: `Bearer ${token || localStorage.getItem("jwt")}`,
+        },
+    });
 };
-
 // Đăng xuất
 const logOutUser = (): Promise<any> => {
     return axios.post(`/api/v1/logout`);

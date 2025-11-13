@@ -56,7 +56,7 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
     const fetchUser = async (token: string) => {
         try {
-            const response = await getUserAccount();
+            const response = await getUserAccount(token); // <-- truyền token vào đây
             if (response && response.EC === 0) {
                 const { groupWithRoles, email, username, access_token } = response.DT;
                 const data: UserState = {

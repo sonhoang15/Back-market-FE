@@ -36,7 +36,7 @@ export default function AppRoutes() {
                 <Route path="/pants" element={<Pants />} />
                 <Route path="/shirts" element={<Shirts />} />
                 <Route path="/news" element={<News />} />
-                <Route path="/productDetail" element={<ProductDetail />} />
+                <Route path="/product/:id" element={<ProductDetail />} />
                 <Route path="/home" element={<Home />} />
             </Route>
 

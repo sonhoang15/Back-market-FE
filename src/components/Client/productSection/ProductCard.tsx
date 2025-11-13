@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import BuyNowModal from './buyNow';
+import { Link } from "react-router-dom";
 
 export interface Product {
     id: number;
@@ -28,11 +29,6 @@ export default function ProductCard({ product }: ProductCardProps) {
 
         // Sử dụng Set để loại bỏ các URL trùng lặp
         const uniqueThumbnails = [...new Set(allImages)];
-
-        console.log('Main image:', product.img);
-        console.log('All thumbnails:', product.thumbnails);
-        console.log('Unique thumbnails (including main):', uniqueThumbnails);
-
         return uniqueThumbnails;
     };
 
@@ -42,8 +38,8 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="product-item shadow-lg p-4">
             {/* Ảnh chính */}
             <div className="product-top mb-4">
-                <a
-                    href="/productDetail"
+                <Link
+                    to={`/product/${product.id}`}
                     className="product-thumb block overflow-hidden rounded-lg bg-[#f8f9fc]"
                 >
                     <div className="w-full h-[500px] flex items-center justify-center">
@@ -53,7 +49,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                             className="max-h-full max-w-full object-contain transition-transform duration-300 ease-in-out hover:scale-105"
                         />
                     </div>
-                </a>
+                </Link>
             </div>
 
             {/* Thumbnail - BAO GỒM CẢ ẢNH CHÍNH VÀ ẢNH DUY NHẤT */}
@@ -92,7 +88,9 @@ export default function ProductCard({ product }: ProductCardProps) {
                 <ul className="flex justify-around border border-black p-[10px] ">
                     <BuyNowModal />
                     <li>
-                        <a href="/productDetail" className="text-black hover:text-gray-400">Chi Tiết</a>
+                        <Link to={`/product/${product.id}`} className="text-black hover:text-gray-400">
+                            Chi Tiết
+                        </Link>
                     </li>
                 </ul>
             </div>
