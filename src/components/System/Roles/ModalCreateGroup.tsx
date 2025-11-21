@@ -34,12 +34,12 @@ const ModalCreateGroup: React.FC<ModalCreateGroupProps> = ({
             if (responseData && +responseData.EC === 0) {
                 toast.success(responseData.EM || "Group created successfully!");
 
-                // callback cho component cha
+
                 if (onCreated) {
                     onCreated(responseData.DT);
                 }
 
-                // reset form
+
                 setNewGroupName("");
                 setNewGroupDesc("");
                 setGroupError("");
@@ -53,12 +53,12 @@ const ModalCreateGroup: React.FC<ModalCreateGroupProps> = ({
         }
     };
 
-    if (!isOpen) return null; // không render nếu đóng
+    if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
             <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-6 relative">
-                {/* nút đóng */}
+
                 <button
                     onClick={onClose}
                     className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"

@@ -12,7 +12,7 @@ import ModalDelete from "./ModalDelete";
 interface Props {
     variants: ProductVariant[];
     productId: number;
-    onRefresh: () => void; // gọi để reload variants sau thay đổi
+    onRefresh: () => void;
 }
 
 const emptyForm = {
@@ -36,14 +36,13 @@ export const ProductVariantTable: React.FC<Props> = ({
     const [isOpen, setIsOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [form, setForm] = useState({ ...emptyForm });
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null); // preview (existing url or local object url)
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [file, setFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [deleteId, setDeleteId] = useState<number | null>(null);
 
     useEffect(() => {
-        // reset when modal closed
         if (!isOpen) {
             setForm({ ...emptyForm });
             setPreviewUrl(null);
@@ -73,7 +72,6 @@ export const ProductVariantTable: React.FC<Props> = ({
             source_url: (v as any).source_url ?? "",
             source_type: (v as any).source_type ?? "",
         });
-        // preview có thể là v.image (url) hoặc v.images[0]
         setPreviewUrl((v as any).image ?? (v as any).images?.[0] ?? null);
         setFile(null);
         setIsEditing(true);
@@ -106,7 +104,6 @@ export const ProductVariantTable: React.FC<Props> = ({
 
         try {
             if (!isEditing) {
-                // --- Thêm mới ---
                 const payload: any = {
                     product_id: productId,
                     color: form.color,
@@ -126,11 +123,11 @@ export const ProductVariantTable: React.FC<Props> = ({
 
                 const res = await apiCreateVariant(payload);
                 if (res?.EC === 0) {
-                    toast.success("🎉 Tạo biến thể thành công!");
-                    onRefresh?.();       // ✅ Gọi callback để cập nhật danh sách
-                    setIsOpen(false);    // ✅ Đóng modal
+                    toast.success(" Tạo biến thể thành công!");
+                    onRefresh?.();
+                    setIsOpen(false);
                 } else {
-                    toast.error("❌ Lỗi tạo biến thể: " + (res?.EM ?? "Unknown"));
+                    toast.error(" Lỗi tạo biến thể: " + (res?.EM ?? "Unknown"));
                 }
             } else {
                 // --- Cập nhật ---
@@ -149,16 +146,16 @@ export const ProductVariantTable: React.FC<Props> = ({
                 const res = await apiUpdateVariant(fm);
 
                 if (res?.EC === 0) {
-                    toast.success("✏️ Cập nhật biến thể thành công!");
-                    onRefresh?.();       // ✅ Cập nhật lại danh sách
-                    setIsOpen(false);    // ✅ Đóng modal
+                    toast.success(" Cập nhật biến thể thành công!");
+                    onRefresh?.();
+                    setIsOpen(false);
                 } else {
-                    toast.error("❌ Lỗi cập nhật: " + (res?.EM ?? "Unknown"));
+                    toast.error("Lỗi cập nhật: " + (res?.EM ?? "Unknown"));
                 }
             }
         } catch (err) {
             console.error("Variant submit error:", err);
-            toast.error("⚠️ Lỗi khi lưu biến thể");
+            toast.error(" Lỗi khi lưu biến thể");
         } finally {
             setLoading(false);
         }
@@ -178,7 +175,7 @@ export const ProductVariantTable: React.FC<Props> = ({
         }
     };
 
-    // Nhóm các variant theo màu
+
     const variantsByColor = variants.reduce((acc: Record<string, ProductVariant[]>, v) => {
         const colorKey = v.color || "unknown";
         if (!acc[colorKey]) acc[colorKey] = [];
@@ -186,12 +183,10 @@ export const ProductVariantTable: React.FC<Props> = ({
         return acc;
     }, {});
 
-    // Tạo mảng các nhóm variant để render
     const variantGroups = Object.values(variantsByColor).flatMap(colorGroup => {
-        // Sắp xếp theo size hoặc theo một tiêu chí nào đó nếu cần
         return colorGroup.map((variant, index) => ({
             ...variant,
-            // Đánh dấu đây có phải là variant đầu tiên của màu này không
+
             isFirstOfColor: index === 0
         }));
     });
@@ -290,7 +285,6 @@ export const ProductVariantTable: React.FC<Props> = ({
                     </div>
                 )}
 
-                {/* Modal */}
                 {isOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
                         <div className="bg-white rounded-lg shadow-lg w-full max-w-xl p-4">
@@ -300,7 +294,7 @@ export const ProductVariantTable: React.FC<Props> = ({
 
                             <form onSubmit={handleSubmit} className="space-y-3">
                                 <div className="grid grid-cols-2 gap-3">
-                                    {/* Tên */}
+
                                     <div>
                                         <label htmlFor="variant-name" className="block text-sm font-medium mb-1">
                                             Tên biến thể
@@ -314,7 +308,7 @@ export const ProductVariantTable: React.FC<Props> = ({
                                         <p className="text-xs text-gray-500 mt-1">Để trống = tự sinh tên</p>
                                     </div>
 
-                                    {/* Màu */}
+
                                     <div>
                                         <label htmlFor="variant-color" className="block text-sm font-medium mb-1">
                                             Màu
@@ -327,7 +321,7 @@ export const ProductVariantTable: React.FC<Props> = ({
                                         />
                                     </div>
 
-                                    {/* Size */}
+
                                     <div>
                                         <label htmlFor="variant-size" className="block text-sm font-medium mb-1">
                                             Size
@@ -340,7 +334,6 @@ export const ProductVariantTable: React.FC<Props> = ({
                                         />
                                     </div>
 
-                                    {/* Giá */}
                                     <div>
                                         <label htmlFor="variant-price" className="block text-sm font-medium mb-1">
                                             Giá (₫)
@@ -354,7 +347,7 @@ export const ProductVariantTable: React.FC<Props> = ({
                                         />
                                     </div>
 
-                                    {/* Stock */}
+
                                     <div>
                                         <label htmlFor="variant-stock" className="block text-sm font-medium mb-1">
                                             Kho (Stock)
@@ -368,7 +361,7 @@ export const ProductVariantTable: React.FC<Props> = ({
                                         />
                                     </div>
 
-                                    {/* Nguồn */}
+
                                     <div>
                                         <label htmlFor="variant-source-type" className="block text-sm font-medium mb-1">
                                             Nguồn
@@ -381,7 +374,7 @@ export const ProductVariantTable: React.FC<Props> = ({
                                         />
                                     </div>
 
-                                    {/* Source URL */}
+
                                     <div className="col-span-2">
                                         <label htmlFor="variant-source-url" className="block text-sm font-medium mb-1">
                                             Source URL
@@ -395,7 +388,6 @@ export const ProductVariantTable: React.FC<Props> = ({
                                     </div>
                                 </div>
 
-                                {/* Ảnh */}
                                 <div>
                                     <label htmlFor="variant-image" className="block text-sm font-medium mb-1">
                                         Ảnh (upload mới để thay thế)
@@ -420,7 +412,7 @@ export const ProductVariantTable: React.FC<Props> = ({
                                     )}
                                 </div>
 
-                                {/* Buttons */}
+
                                 <div className="flex justify-end gap-2">
                                     <button
                                         type="button"

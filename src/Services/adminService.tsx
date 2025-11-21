@@ -1,6 +1,5 @@
 import axios from "../setup/axios";
 
-// Interface cho Product (phục vụ admin CRUD)
 export interface ProductData {
     id?: number;
     name: string;

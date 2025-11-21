@@ -19,12 +19,12 @@ import CheckoutPage from "../components/Client/subPage/checkOut";
 import PersonalInfoForm from "../components/Client/subPage/personalInfoForm";
 import OrderAdmin from "../components/System/ManagerProduct/OrderAdmin";
 import Search from "../components/Client/subPage/SearchPage";
-// bạn tách riêng mấy hàm PrivateRoute, PublicRoute, AdminRoute, HomeRedirect ra 1 file RouteGuards.tsx cho gọn
+
 
 export default function AppRoutes() {
     return (
         <Routes>
-            {/* Auth */}
+
             <Route
                 path="/auth"
                 element={
@@ -34,7 +34,6 @@ export default function AppRoutes() {
                 }
             />
 
-            {/* Client routes */}
             <Route element={<ClientLayout />}>
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/accessories" element={<Accessory />} />
@@ -47,7 +46,7 @@ export default function AppRoutes() {
                 <Route path="/home" element={<Home />} />
             </Route>
 
-            {/* System routes */}
+
             <Route
                 path="/system"
                 element={
@@ -67,10 +66,10 @@ export default function AppRoutes() {
                 <Route path="*" element={<div>Page not found in System</div>} />
             </Route>
 
-            {/* Root redirect */}
+
             <Route path="/" element={<HomeRedirect />} />
 
-            {/* 404 */}
+
             <Route path="*" element={<div>404 not found</div>} />
         </Routes>
     );

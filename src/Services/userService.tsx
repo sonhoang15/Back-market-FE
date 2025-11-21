@@ -1,7 +1,5 @@
-// import axios from "axios";
 import axios from "../setup/axios"
 
-// Kiểu cho user
 interface User {
     id: number;
     email?: string;
@@ -12,7 +10,7 @@ interface User {
     [key: string]: any;
 }
 
-// Kiểu cho đăng ký
+
 const RegisterService = (
     email: string,
     username: string,
@@ -27,7 +25,7 @@ const RegisterService = (
     });
 };
 
-// Kiểu cho đăng nhập
+
 const LoginService = (
     valueLogin: string,
     password: string
@@ -38,7 +36,6 @@ const LoginService = (
     });
 };
 
-// Lấy danh sách người dùng
 const fetchAllUsers = (
     page: number,
     limit: number
@@ -46,7 +43,7 @@ const fetchAllUsers = (
     return axios.get(`/api/v1/user/read?page=${page}&limit=${limit}`);
 };
 
-// Xoá người dùng
+
 const deleteUser = (
     user: { id: number }
 ): Promise<any> => {
@@ -55,26 +52,25 @@ const deleteUser = (
     });
 };
 
-// Lấy danh sách nhóm
 const fetchGroups = (): Promise<any> => {
     return axios.get(`/api/v1/group/read`);
 };
 
-// Tạo người dùng mới
+
 const createNewUser = (
     userData: User
 ): Promise<any> => {
     return axios.post(`/api/v1/user/create`, { ...userData });
 };
 
-// Cập nhật người dùng
+
 const updateUser = (
     userData: User
 ): Promise<any> => {
     return axios.put(`/api/v1/user/update`, { ...userData });
 };
 
-// Lấy thông tin tài khoản
+
 const getUserAccount = async (token?: string) => {
     return axios.get("/api/v1/account", {
         headers: {
@@ -82,7 +78,7 @@ const getUserAccount = async (token?: string) => {
         },
     });
 };
-// Đăng xuất
+
 const logOutUser = (): Promise<any> => {
     return axios.post(`/api/v1/logout`);
 };

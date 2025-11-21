@@ -47,7 +47,7 @@ function ProductDetail() {
         stock,
         price,
     } = useProductVariants(variants, product?.price);
-    // ---------------------------
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -60,7 +60,6 @@ function ProductDetail() {
                     getProductById(Number(id)),
                 ]);
 
-                // Variants
                 if (variantsRes?.EC === 0 && variantsRes.DT?.length > 0) {
                     const cleaned = variantsRes.DT.map((v: any) => ({
                         id: v.id,
@@ -72,13 +71,11 @@ function ProductDetail() {
                     }));
                     setVariants(cleaned);
 
-                    // Set default color
                     setSelectedColor(cleaned[0].color);
                 } else {
                     toast.error("Không tìm thấy biến thể sản phẩm");
                 }
 
-                // Product
                 if (productRes?.EC === 0 && productRes.DT) {
                     setProduct(productRes.DT);
                 } else {
@@ -96,15 +93,12 @@ function ProductDetail() {
         fetchData();
     }, [id]);
 
-    // Tổng stock
     const totalStock = variants.reduce((total, v: any) => total + v.stock, 0);
 
-    // Main image theo màu
     const mainImage =
         (selectedColor && groupedByColor[selectedColor]?.[0]?.image) ||
         product?.img;
 
-    // Quantity handlers
     const minusQuantity = () => {
         if (quantity > 1) setQuantity(quantity - 1);
     };
@@ -113,7 +107,6 @@ function ProductDetail() {
         if (quantity < stock) setQuantity(quantity + 1);
     };
 
-    // Add to cart
     const handleAddToCart = async () => {
         if (!matchedVariant) {
             toast.warn("Vui lòng chọn màu và size hợp lệ");
@@ -179,7 +172,6 @@ function ProductDetail() {
     return (
         <section className="w-full px-10 mt-[150px]">
 
-            {/* BREADCRUMB */}
             <div className="flex py-5 text-sm">
                 <a href="/home" className="px-5 text-gray-700">Trang Chủ</a>
                 <span className="border-l border-black" />
@@ -190,13 +182,11 @@ function ProductDetail() {
 
             <div className="flex py-10">
 
-                {/* LEFT */}
                 <div className="w-3/4 flex">
                     <div className="w-full pr-5">
                         <img src={mainImage!} className="w-full object-cover" alt={product?.name} />
                     </div>
 
-                    {/* Color thumbnails */}
                     <div className="w-1/5 space-y-2 pl-1">
                         {Object.keys(groupedByColor).map((color) => {
                             const group = groupedByColor[color];
@@ -223,10 +213,8 @@ function ProductDetail() {
                     </div>
                 </div>
 
-                {/* RIGHT */}
                 <div className="w-1/4 pl-5">
 
-                    {/* NAME + STOCK */}
                     <div className="border-b border-gray-300 pb-2 mb-3">
                         <h1 className="text-lg font-semibold">{product?.name}</h1>
                         <p className={`text-sm ${totalStock > 0 ? "text-green-600" : "text-red-600"}`}>
@@ -234,12 +222,10 @@ function ProductDetail() {
                         </p>
                     </div>
 
-                    {/* PRICE */}
                     <div className="py-2 text-2xl font-bold text-red-600">
                         {Number(price).toLocaleString("vi-VN")}₫
                     </div>
 
-                    {/* COLOR */}
                     <div className="my-4">
                         <p className="font-medium">Màu sắc</p>
                         <div className="flex space-x-2 mt-2">
@@ -266,7 +252,6 @@ function ProductDetail() {
                         </div>
                     </div>
 
-                    {/* SIZE */}
                     <div className="my-4">
                         <p className="font-medium">Size</p>
                         <div className="flex space-x-2 mt-2 flex-wrap gap-2">
@@ -292,7 +277,6 @@ function ProductDetail() {
                         </div>
                     </div>
 
-                    {/* QUANTITY */}
                     <div className="my-6">
                         <p className="font-medium mb-2">Số lượng</p>
 
@@ -322,7 +306,6 @@ function ProductDetail() {
                         )}
                     </div>
 
-                    {/* BUTTONS */}
                     <div className="flex space-x-3 mb-6">
                         <button
                             onClick={handleAddToCart}
@@ -343,7 +326,6 @@ function ProductDetail() {
                         </button>
                     </div>
 
-                    {/* DESCRIPTION */}
                     {product?.description && (
                         <div className="border-b border-gray-200 py-4">
                             <h2 className="font-semibold mb-2">Thuộc tính sản phẩm</h2>

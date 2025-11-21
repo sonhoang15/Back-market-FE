@@ -7,7 +7,6 @@ interface AddToCartParams {
     quantity: number;
 }
 
-// Kiểu cho CartItem
 export interface CartItem {
     id: number;
     cart_id: number;
@@ -20,7 +19,6 @@ export interface CartItem {
     variant?: { name: string;[key: string]: any };
 }
 
-// Kiểu cho Cart
 export interface Cart {
     id: number;
     user_id: number;
@@ -31,18 +29,17 @@ export interface Cart {
 }
 
 
-// Lấy giỏ hàng hiện tại
+
 const getCart = async (): Promise<Cart> => {
     const res = await axios.get("/api/v1/cart/read");
     return res;
 };
 
-// Thêm sản phẩm vào giỏ
+
 const addToCart = ({ productId, variantId, quantity }: AddToCartParams): Promise<any> => {
     return axios.post("/api/v1/cart/add-item", { productId, variantId, quantity });
 };
 
-// Cập nhật số lượng sản phẩm
 const updateCartItem = async (
     itemId: number,
     quantity: number
@@ -51,13 +48,12 @@ const updateCartItem = async (
     return res;
 };
 
-// Xóa sản phẩm khỏi giỏ
 const removeCartItem = async (itemId: number): Promise<{ cart: Cart }> => {
     const res = await axios.delete(`/api/v1/cart/delete/${itemId}`);
     return res;
 };
 
-// Checkout giỏ hàng
+
 const checkoutCart = async (): Promise<{ order: any }> => {
     const res = await axios.post("/api/v1/cart/checkout");
     return res;

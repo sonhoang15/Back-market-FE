@@ -14,12 +14,12 @@ const ModalDelete: React.FC<ModalDeleteProps> = ({
     ConfirmDelete,
     userToDelete,
 }) => {
-    if (!show) return null; // Ẩn modal khi show = false
+    if (!show) return null;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
             <div className="bg-white w-full max-w-md rounded-xl shadow-lg p-6 animate-fadeIn">
-                {/* Header */}
+
                 <div className="flex justify-between items-center border-b pb-3">
                     <h2 className="text-lg font-semibold text-gray-800">
                         Confirm delete user
@@ -32,7 +32,7 @@ const ModalDelete: React.FC<ModalDeleteProps> = ({
                     </button>
                 </div>
 
-                {/* Body */}
+
                 <div className="py-4 text-gray-700">
                     Woohoo, are you sure to delete user:{" "}
                     <span className="font-medium text-red-600">
@@ -41,7 +41,6 @@ const ModalDelete: React.FC<ModalDeleteProps> = ({
                     ?
                 </div>
 
-                {/* Footer */}
                 <div className="flex justify-end gap-3 mt-4">
                     <button
                         onClick={handleClose}

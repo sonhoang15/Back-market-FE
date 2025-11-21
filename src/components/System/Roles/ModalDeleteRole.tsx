@@ -18,11 +18,11 @@ export interface TableRolesRef {
 const ModalDeleteRole = forwardRef<TableRolesRef, ModalDeleteRoleProps>(
     ({ show, handleClose, ConfirmDelete, roleToDelete }, ref) => {
 
-        // Expose method ra ngoài qua ref
+
         useImperativeHandle(ref, () => ({
             fetchListRole() {
                 console.log("fetchListRole từ ModalDeleteRole");
-                // logic fetch
+
             }
         }));
 

@@ -17,16 +17,15 @@ const CartSidebar: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchCart(); // load giỏ hàng khi component mount
+        fetchCart();
     }, []);
 
     useEffect(() => {
         if (isOpen) {
-            fetchCart(); // load lại khi mở sidebar
+            fetchCart();
         }
     }, [isOpen]);
 
-    // Thêm 1 hàm fetch lại cart
     const fetchCart = async () => {
         try {
             const data = await getCart();
@@ -36,42 +35,36 @@ const CartSidebar: React.FC = () => {
         }
     };
 
-    // Tăng số lượng
     const handleIncrease = async (item: CartItem) => {
         try {
             await updateCartItem(item.id, item.quantity + 1);
-            await fetchCart(); // fetch lại cart mới
+            await fetchCart();
         } catch (err) {
             console.error(err);
         }
     };
 
-    // Giảm số lượng
     const handleDecrease = async (item: CartItem) => {
         if (item.quantity <= 1) return;
         try {
             await updateCartItem(item.id, item.quantity - 1);
-            await fetchCart(); // fetch lại cart mới
+            await fetchCart();
         } catch (err) {
             console.error(err);
         }
     };
 
-    // Xóa item
     const handleRemove = async (item: CartItem) => {
         try {
             await removeCartItem(item.id);
-            await fetchCart(); // fetch lại cart mới
+            await fetchCart();
         } catch (err) {
             console.error(err);
         }
     };
 
-    // Checkout
     const handleCheckout = () => {
-        // 1) chuyển sang trang /checkout
         navigate(`/checkout?cart_id=${cart?.id}`);
-        // 2) đóng modal giỏ hàng
         setIsOpen(false);
     };
 
@@ -85,7 +78,6 @@ const CartSidebar: React.FC = () => {
 
     return (
         <div>
-            {/* Nút mở giỏ hàng */}
             <div
                 onClick={() => setIsOpen(true)}
                 className="flex items-center space-x-1 cursor-pointer hover:text-blue-600"
@@ -94,7 +86,6 @@ const CartSidebar: React.FC = () => {
                 <span>GIỎ HÀNG ({totalQuantity})</span>
             </div>
 
-            {/* Overlay */}
             {isOpen && (
                 <div
                     className="fixed inset-0 bg-black bg-opacity-40 z-40"
@@ -102,12 +93,10 @@ const CartSidebar: React.FC = () => {
                 />
             )}
 
-            {/* Sidebar giỏ hàng (1/2 màn hình) */}
             <div
                 className={`fixed top-0 right-0 h-full w-1/2 md:w-1/3 bg-white shadow-2xl transform transition-transform duration-300 z-50 
           ${isOpen ? "translate-x-0" : "translate-x-full"}`}
             >
-                {/* Header */}
                 <div className="flex justify-between items-center p-4 border-b">
                     <h2 className="text-lg font-semibold">Giỏ hàng</h2>
                     <button
@@ -118,8 +107,6 @@ const CartSidebar: React.FC = () => {
                         <X size={20} />
                     </button>
                 </div>
-
-                {/* Danh sách sản phẩm */}
                 <div className="p-4 space-y-4 overflow-y-auto h-[calc(100%-140px)]">
                     {cart?.items?.length ? (
                         cart.items.map((item) => (
@@ -127,7 +114,6 @@ const CartSidebar: React.FC = () => {
                                 key={item.id}
                                 className="flex items-center gap-4 border-b pb-3 p-2 rounded relative"
                             >
-                                {/* Ảnh sản phẩm / variant */}
                                 <Link to={`/product/${item.product_id}`} onClick={() => setIsOpen(false)}>
                                     <img
                                         src={item.variant?.image || item.product?.thumbnail || ""}
@@ -136,11 +122,9 @@ const CartSidebar: React.FC = () => {
                                     />
                                 </Link>
 
-                                {/* Thông tin sản phẩm */}
                                 <div className="flex-1">
                                     <h3 className="font-medium">{item.product?.name}</h3>
 
-                                    {/* Hiển thị variant name và size */}
                                     {item.variant && (
                                         <p className="text-sm text-gray-600">
                                             {item.variant.name} {item.variant.size ? `- Size: ${item.variant.size}` : ""}
@@ -149,7 +133,6 @@ const CartSidebar: React.FC = () => {
 
                                     <p className="text-sm text-gray-600">{item.price.toLocaleString()}đ</p>
 
-                                    {/* Nút tăng giảm số lượng */}
                                     <div className="flex items-center mt-2 space-x-2">
                                         <button
                                             onClick={() => handleDecrease(item)}
@@ -169,7 +152,6 @@ const CartSidebar: React.FC = () => {
                                     </div>
                                 </div>
 
-                                {/* Tổng giá */}
                                 <div className="flex flex-col items-end">
                                     <p className="font-semibold">
                                         {item.total_price.toLocaleString()}đ
@@ -189,7 +171,6 @@ const CartSidebar: React.FC = () => {
                     )}
                 </div>
 
-                {/* Footer */}
                 <div className="absolute bottom-0 w-full p-4 border-t bg-white">
                     <div className="flex justify-between font-semibold mb-3">
                         <span>Tổng cộng:</span>

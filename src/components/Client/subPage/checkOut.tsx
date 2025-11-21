@@ -23,7 +23,6 @@ export default function CheckoutForm() {
     const [items, setItems] = useState<any[]>([]);
     const [total, setTotal] = useState(0);
 
-    // Lấy query param
     const location = useLocation();
     const query = new URLSearchParams(location.search);
 
@@ -34,7 +33,6 @@ export default function CheckoutForm() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
-    // ⬇️ Fetch profile
     useEffect(() => {
         const fetchProfile = async () => {
             try {
@@ -61,17 +59,15 @@ export default function CheckoutForm() {
         fetchProfile();
     }, []);
 
-    // ⬇️ Fetch sản phẩm giỏ hàng hoặc Buy Now
     useEffect(() => {
         const fetchOrderData = async () => {
             try {
-                // CASE 1 — Checkout từ giỏ hàng
                 if (cartId) {
                     const res: any = await getCart();
 
                     console.log("getCart RAW:", res);
 
-                    const cart = res;  // FIX CHUẨN TỪ LOG
+                    const cart = res;
 
                     if (!cart || !cart.items) {
                         toast.error("Không tìm thấy giỏ hàng");
@@ -93,7 +89,6 @@ export default function CheckoutForm() {
                     setTotal(Number(cart.total_price) || 0);
                     return;
                 }
-                // CASE 2 — Buy Now
                 if (productId) {
                     const res: any = await getProductById(Number(productId));
 
@@ -156,7 +151,7 @@ export default function CheckoutForm() {
             }
         }
         try {
-            setLoading(true); // 🔥 BẬT LOADING
+            setLoading(true);
             const isBuyNow = location.state?.type === "buy-now";
 
             const queryParams = new URLSearchParams(location.search);
@@ -219,7 +214,7 @@ export default function CheckoutForm() {
             toast.error("Lỗi đặt hàng!");
         }
         finally {
-            setLoading(false); // 🔥 TẮT LOADING
+            setLoading(false);
         }
     };
 
@@ -235,7 +230,6 @@ export default function CheckoutForm() {
     }
     return (
         <div className="w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 p-6 mt-[120px]">
-            {/* LEFT - SHIPPING INFO */}
             <div>
                 <h2 className="text-xl font-semibold mb-4">Thông tin giao hàng</h2>
 
@@ -262,7 +256,6 @@ export default function CheckoutForm() {
                 </label>
             </div>
 
-            {/* RIGHT - ORDER SUMMARY */}
             <div className="bg-gray-50 p-6 rounded-lg border">
                 <h2 className="text-xl font-semibold mb-4">Đơn hàng</h2>
 

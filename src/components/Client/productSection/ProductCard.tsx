@@ -52,7 +52,6 @@ interface ProductCardProps {
 export function normalizeProduct(data: any): Product {
     const variants = Array.isArray(data.variants) ? data.variants : [];
 
-    // ảnh từ variants
     const variantImages = variants
         .map((v: any) => v.image)
         .filter((img: string) => !!img);
@@ -83,16 +82,15 @@ export function normalizeProduct(data: any): Product {
 export function normalizBestSellerProduct(item: any) {
     const variants = item.variants || [];
 
-    // danh sách ảnh từ variant
+
     const variantImages = variants
         .map((v: any) => v.image)
         .filter((img: string) => !!img);
 
-    // chọn ảnh chính ưu tiên:
     const mainImage =
-        item.variant_image ||      // ưu tiên ảnh variant API trả về
-        item.thumbnail ||          // fallback thumbnail
-        variantImages[0] ||        // fallback variant khác
+        item.variant_image ||
+        item.thumbnail ||
+        variantImages[0] ||
         "";
 
     return {
@@ -120,7 +118,6 @@ function parsePriceToNumber(input: number | string | undefined): number {
 export default function ProductCard({ product }: ProductCardProps) {
     const [currentImage, setCurrentImage] = useState(product.img);
 
-    // unique images
     const uniqueThumbnails = Array.from(
         new Set([product.img, ...(product.thumbnails || [])].filter(Boolean))
     );
@@ -131,7 +128,6 @@ export default function ProductCard({ product }: ProductCardProps) {
         if (Array.isArray(v.images)) {
             variantImages = v.images.map((x) => String(x));
         } else if (typeof v.images === "number") {
-            // backend trả 123 → ép thành URL dạng placeholder
             variantImages = [`${v.images}`];
         } else if (v.image) {
             variantImages = [String(v.image)];
@@ -185,7 +181,6 @@ export default function ProductCard({ product }: ProductCardProps) {
 
     return (
         <div className="product-item shadow-lg p-4">
-            {/* Ảnh chính */}
             <div className="product-top mb-4">
                 <Link
                     to={`/product/${product.id}`}
@@ -201,7 +196,6 @@ export default function ProductCard({ product }: ProductCardProps) {
                 </Link>
             </div>
 
-            {/* Thumbnails */}
             {uniqueThumbnails.length > 0 && (
                 <div className="image-min mb-4">
                     <ul className="list-logo flex justify-center gap-2">
@@ -226,7 +220,6 @@ export default function ProductCard({ product }: ProductCardProps) {
                 </div>
             )}
 
-            {/* Info */}
             <div className="product-infor text-center">
                 <a href="#" className="block font-medium text-gray-800 hover:text-gray-400 transition">
                     {product.name}

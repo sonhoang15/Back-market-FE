@@ -54,7 +54,6 @@ const SignInForm = () => {
                 localStorage.setItem("jwt", token);
                 loginContext(data);
 
-                // Điều hướng theo groupWithRoles
                 if (groupWithRoles.groupId === 2) {
                     navigate("/system");
                 } else {

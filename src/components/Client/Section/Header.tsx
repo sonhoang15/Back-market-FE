@@ -40,7 +40,7 @@ const Header = () => {
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setShowMenu(false); // 🔥 tự đóng dropdown
+        setShowMenu(false);
       }
     }
 
@@ -92,7 +92,6 @@ const Header = () => {
   if (user && user.isAuthenticated === true || location.pathname === '/home' || location.pathname === '/news') {
     return (
       <header className="w-full">
-        {/* Top bar */}
         <div className="w-full bg-gray-100 transition-all duration-300">
           <div className="max-w-[110rem] mx-auto px-4 flex justify-between items-center text-xs sm:text-sm">
             <div className="flex items-center space-x-2 text-gray-600">
@@ -122,7 +121,6 @@ const Header = () => {
                   {showMenu && (
                     <div className="absolute right-0 mt-2 w-32 bg-white border rounded-lg shadow-lg z-50">
 
-                      {/* Nút Profile */}
                       {showMenu && (
                         <div
                           ref={menuRef}
@@ -155,7 +153,6 @@ const Header = () => {
                           )}
                         </div>
                       )}
-                      {/* Admin button */}
                       {user?.account?.groupWithRoles?.id === 1 && (
                         <button
                           onClick={handleAdminClick}
@@ -172,14 +169,12 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Main header */}
         <div
           className={`fixed left-0 w-full z-30 transition-all duration-600
       ${isSticky ? "shadow-md backdrop-blur bg-white/80 top-0" : "bg-white"}  `}
         >
           <div className="max-w-[110rem] mx-auto px-4 py-4">
             <div className="flex items-center justify-between relative">
-              {/* Logo */}
               <NavLink to="/home" className="flex items-center">
                 <img
                   src={logo}
@@ -190,7 +185,6 @@ const Header = () => {
                 />
               </NavLink>
 
-              {/* Nav desktop */}
               <nav className="hidden md:flex gap-6 lg:gap-12 text-sm lg:text-base absolute left-1/2 -translate-x-1/2">
                 <NavLink to="/shirts" className="hover:text-gray-500 font-medium">ÁO NAM</NavLink>
                 <NavLink to="/pants" className="hover:text-gray-500 font-medium">QUẦN NAM</NavLink>
@@ -198,7 +192,6 @@ const Header = () => {
                 <NavLink to="/news" className="hover:text-gray-500 font-medium">TIN TỨC</NavLink>
               </nav>
 
-              {/* Search (desktop) */}
               <div className="relative hidden md:block w-40 md:w-56 lg:w-64">
                 <input
                   type="text"
@@ -228,7 +221,6 @@ const Header = () => {
                 </button>
               </div>
 
-              {/* Mobile menu button */}
               <button
                 type="button"
                 aria-label="Search"
@@ -243,13 +235,13 @@ const Header = () => {
         </div>
         {mobileMenu && (
           <div className="fixed inset-0 z-50">
-            {/* Overlay */}
+
             <div
               className="absolute inset-0 bg-black/50"
               onClick={() => setMobileMenu(false)}
             ></div>
 
-            {/* Sidebar */}
+
             <div className="absolute left-0 top-0 h-full w-64 bg-white shadow-lg p-6 animate-slideIn">
               <button
                 type="button"
@@ -260,7 +252,7 @@ const Header = () => {
               >
                 <X size={24} />
               </button>
-              {/* Search box cho mobile */}
+
               <div className="mb-6">
                 <input
                   type="text"

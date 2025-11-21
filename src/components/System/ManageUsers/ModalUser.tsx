@@ -125,7 +125,7 @@ const ModalUser: React.FC<ModalUserProps> = ({
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 overflow-y-auto">
             <div className="bg-white w-full max-w-4xl rounded-xl shadow-lg p-6">
-                {/* Header */}
+
                 <div className="flex justify-between items-center border-b border-gray-200 pb-3">
                     <h2 className="text-lg font-semibold text-gray-800">
                         {action === "CREATE" ? "Create new user" : "Edit user"}
@@ -138,9 +138,9 @@ const ModalUser: React.FC<ModalUserProps> = ({
                     </button>
                 </div>
 
-                {/* Body */}
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                    {/* Email */}
+
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Email</label>
                         <input
@@ -156,7 +156,7 @@ const ModalUser: React.FC<ModalUserProps> = ({
                         />
                     </div>
 
-                    {/* Username */}
+
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Username</label>
                         <input
@@ -171,7 +171,7 @@ const ModalUser: React.FC<ModalUserProps> = ({
                         />
                     </div>
 
-                    {/* Phone */}
+
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Phone</label>
                         <input
@@ -187,7 +187,7 @@ const ModalUser: React.FC<ModalUserProps> = ({
                         />
                     </div>
 
-                    {/* Password */}
+
                     {action === "CREATE" && (
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Password</label>
@@ -204,7 +204,7 @@ const ModalUser: React.FC<ModalUserProps> = ({
                         </div>
                     )}
 
-                    {/* Address */}
+
                     <div className="sm:col-span-2">
                         <label className="block text-sm font-medium text-gray-700">Address</label>
                         <input
@@ -219,7 +219,7 @@ const ModalUser: React.FC<ModalUserProps> = ({
                         />
                     </div>
 
-                    {/* Group */}
+
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Group</label>
                         <select
@@ -240,7 +240,7 @@ const ModalUser: React.FC<ModalUserProps> = ({
                     </div>
                 </div>
 
-                {/* Footer */}
+
                 <div className="flex justify-end gap-3 mt-6 border-t border-gray-200 pt-4">
                     <button
                         onClick={handleCloseModalUser}

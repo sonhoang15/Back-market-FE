@@ -36,7 +36,6 @@ const NavHeader: React.FC = () => {
     return (
         <header className="bg-gray-700 text-white shadow">
             <div className="container mx-auto px-4 flex items-center justify-between h-[80px]">
-                {/* Brand */}
                 <NavLink to="/home" className="flex items-center">
                     <img
                         src={logo}
@@ -47,7 +46,7 @@ const NavHeader: React.FC = () => {
                     />
                 </NavLink>
 
-                {/* Mobile menu button */}
+
                 <button
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                     className="lg:hidden p-2 rounded-md text-gray-300 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors duration-200"
@@ -63,17 +62,16 @@ const NavHeader: React.FC = () => {
                         strokeLinejoin="round"
                     >
                         {isMenuOpen ? (
-                            // Icon "X" (close)
+
                             <path d="M6 18L18 6M6 6l12 12" />
                         ) : (
-                            // Icon "☰" (hamburger)
+
                             <path d="M4 6h16M4 12h16M4 18h16" />
                         )}
                     </svg>
                 </button>
 
 
-                {/* Desktop menu */}
                 <nav className="hidden lg:flex lg:items-center lg:space-x-6">
                     <NavLink
                         to="/system/user"
@@ -144,7 +142,7 @@ const NavHeader: React.FC = () => {
                 </nav>
 
 
-                {/* Desktop user section */}
+
                 <div className="hidden lg:flex items-center space-x-4">
                     {user && user.isAuthenticated ? (
                         <>
@@ -184,7 +182,6 @@ const NavHeader: React.FC = () => {
                 </div>
             </div>
 
-            {/* Mobile menu */}
             {isMenuOpen && (
                 <nav className="lg:hidden bg-gray-800 text-white px-4 py-3 space-y-3">
                     <NavLink

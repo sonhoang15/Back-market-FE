@@ -94,24 +94,24 @@ const ModalEditRole: React.FC<ModalEditRoleProps> = ({ action, dataModalRole, sh
         setValidInput(validInputsDefault);
     };
 
-    // Nếu không dùng thư viện modal, ta tạo overlay + modal custom bằng tailwind
+
     if (!show) return null;
 
     return (
         <>
-            {/* Background overlay */}
+
             <div
                 className="fixed inset-0 bg-black bg-opacity-50 z-40"
                 onClick={handleCloseModalRole}
             ></div>
 
-            {/* Modal */}
+
             <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
                 <div
                     className="bg-white rounded-lg shadow-lg w-full max-w-3xl"
-                    onClick={(e) => e.stopPropagation()} // tránh click lan ra overlay
+                    onClick={(e) => e.stopPropagation()}
                 >
-                    {/* Header */}
+
                     <div className="border-b px-6 py-4 flex justify-between items-center">
                         <h5 className="text-lg font-semibold">Edit Role</h5>
                         <button
@@ -123,7 +123,7 @@ const ModalEditRole: React.FC<ModalEditRoleProps> = ({ action, dataModalRole, sh
                         </button>
                     </div>
 
-                    {/* Body */}
+
                     <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label className="block mb-1 font-medium">Url</label>
@@ -152,7 +152,7 @@ const ModalEditRole: React.FC<ModalEditRoleProps> = ({ action, dataModalRole, sh
                         </div>
                     </div>
 
-                    {/* Footer */}
+
                     <div className="border-t px-6 py-4 flex justify-end space-x-3">
                         <button
                             className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition"

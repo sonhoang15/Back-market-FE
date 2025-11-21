@@ -127,7 +127,7 @@ const AddProductForm: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Biến thể sản phẩm */}
+
                 <div className="space-y-4">
                     <h3 className="text-lg font-semibold">Biến thể sản phẩm</h3>
                     {formData.variants.map((variant, idx) => (

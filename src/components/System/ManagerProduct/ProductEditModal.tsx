@@ -18,13 +18,11 @@ export const ProductEditModal: React.FC<Props> = ({
     const [form, setForm] = useState<Product>({ ...product });
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
 
-    // Thay đổi input
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
         const { name, value } = e.target;
 
-        // Nếu là category select, chuyển value thành number
         if (name === "category" && value) {
             setForm((prev) => ({
                 ...prev,
@@ -35,7 +33,6 @@ export const ProductEditModal: React.FC<Props> = ({
         }
     };
 
-    // Thay đổi ảnh
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -44,7 +41,6 @@ export const ProductEditModal: React.FC<Props> = ({
         }
     };
 
-    // Gửi FormData lên parent
     const handleSave = async () => {
         if (!product.id) {
             toast.error("Không tìm thấy ID sản phẩm!");
@@ -62,18 +58,17 @@ export const ProductEditModal: React.FC<Props> = ({
         formData.append("is_active", String(form.is_active ?? true));
         if (thumbnailFile) formData.append("thumbnail", thumbnailFile);
 
-        await onSave(formData); // ✅ Truyền FormData thật sự
+        await onSave(formData);
     };
 
     return (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-2xl w-[450px] shadow-2xl border border-gray-200 animate-fadeIn">
                 <h2 className="text-xl font-semibold text-gray-800 mb-5 border-b pb-3">
-                    ✏️ Chỉnh sửa sản phẩm
+                    Chỉnh sửa sản phẩm
                 </h2>
 
                 <div className="flex flex-col gap-4">
-                    {/* Ảnh */}
                     <div>
                         <label htmlFor="thumbnail-image" className="block text-sm font-medium text-gray-600 mb-1">
                             Ảnh sản phẩm
@@ -100,7 +95,6 @@ export const ProductEditModal: React.FC<Props> = ({
                         </div>
                     </div>
 
-                    {/* Tên sản phẩm */}
                     <div>
                         <label className="block text-sm font-medium text-gray-600 mb-1">
                             Tên sản phẩm
@@ -114,7 +108,6 @@ export const ProductEditModal: React.FC<Props> = ({
                         />
                     </div>
 
-                    {/* Danh mục */}
                     <div>
                         <label htmlFor="category" className="block text-sm font-medium text-gray-600 mb-1">
                             Danh mục
@@ -135,7 +128,6 @@ export const ProductEditModal: React.FC<Props> = ({
                         </select>
                     </div>
 
-                    {/* Giá */}
                     <div className="grid grid-cols-2 gap-3">
                         <div>
                             <label className="block text-sm font-medium text-gray-600 mb-1">
@@ -165,7 +157,6 @@ export const ProductEditModal: React.FC<Props> = ({
                         </div>
                     </div>
 
-                    {/* Trạng thái */}
                     <div>
                         <label htmlFor="status" className="block text-sm font-medium text-gray-600 mb-1">
                             Trạng thái
@@ -184,7 +175,6 @@ export const ProductEditModal: React.FC<Props> = ({
                     </div>
                 </div>
 
-                {/* Nút hành động */}
                 <div className="flex justify-end gap-3 mt-6">
                     <button
                         onClick={onClose}

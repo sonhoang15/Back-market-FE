@@ -4,7 +4,6 @@ import * as React from 'react';
 import { toast } from 'react-toastify';
 
 const SignUpForm = () => {
-    // const { user } = useContext(UserContext)
     const [email, setEmail] = React.useState("");
     const [username, setUserName] = React.useState("");
     const [phone, setPhone] = React.useState("");
@@ -49,7 +48,6 @@ const SignUpForm = () => {
     useEffect(() => {
         let session = sessionStorage.getItem('account');
         if (session) {
-            // history.push("/");
             window.location.reload();
         }
     }, [])

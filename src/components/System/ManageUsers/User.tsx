@@ -6,12 +6,12 @@ import ModalDelete from './ModalDelete';
 import ModalUser from './ModalUser';
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
 
-// Kiểu dữ liệu Group
+
 interface Group {
     name: string;
 }
 
-// Kiểu dữ liệu User
+
 export interface UserType {
     id: number;
     email: string;
@@ -19,7 +19,7 @@ export interface UserType {
     Group?: Group | null;
 }
 
-// Kiểu dữ liệu trả về khi fetch users
+
 interface FetchUserResponse {
     EC: number;
     EM: string;
@@ -42,7 +42,7 @@ const User: React.FC = () => {
 
     useEffect(() => {
         fetchUsers();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, [itemOffset]);
 
     const fetchUsers = async () => {
@@ -102,7 +102,6 @@ const User: React.FC = () => {
         <>
             <div className="max-w-7xl mx-auto mt-11 px-4">
                 <div className="bg-white shadow rounded-lg p-4">
-                    {/* Header */}
                     <div className="flex flex-col sm:flex-row justify-between items-center border-b pb-4">
                         <div className="title mt-3 sm:mt-0">
                             <h3 className="text-xl font-semibold text-gray-800">Manager User</h3>
@@ -126,7 +125,7 @@ const User: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Table */}
+
                     <div className="overflow-x-auto mt-4">
                         <table className="w-full text-left border border-gray-200 rounded-lg">
                             <thead className="bg-gray-100">
@@ -213,7 +212,7 @@ const User: React.FC = () => {
                     show={showModalDelete}
                     handleClose={handleClose}
                     ConfirmDelete={ConfirmDelete}
-                    userToDelete={userToDelete} // lúc này chắc chắn không null
+                    userToDelete={userToDelete}
                 />
             )
             }

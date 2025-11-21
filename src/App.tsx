@@ -1,6 +1,6 @@
 import AppRoutes from "./Routes/AppRoutes";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // nhớ import CSS
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (

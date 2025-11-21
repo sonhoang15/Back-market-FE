@@ -34,12 +34,10 @@ const SearchPage = () => {
             </div>
             <div>
 
-                {/* TITLE */}
                 <h1 className="text-2xl font-bold text-center mb-10">
                     Kết quả tìm kiếm cho: <span className="text-blue-600">{q}</span>
                 </h1>
 
-                {/* NO RESULT */}
                 {results.length === 0 && (
                     <div className="w-full text-center py-20">
                         <p className="text-gray-500 text-xl font-medium">
@@ -51,7 +49,6 @@ const SearchPage = () => {
                     </div>
                 )}
 
-                {/* RESULT GRID */}
                 {results.length > 0 && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6">
                         {results.map((item) => (

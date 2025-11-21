@@ -12,7 +12,7 @@ function useAuth() {
     return context.user;
 }
 
-// ---- PrivateRoute: chỉ check đăng nhập ----
+
 export function PrivateRoute({ children }: PrivateRouteProps) {
     const user = useAuth();
     const navigate = useNavigate();
@@ -26,7 +26,7 @@ export function PrivateRoute({ children }: PrivateRouteProps) {
     return <>{children}</>;
 }
 
-// ---- PublicRoute: chỉ cho người chưa đăng nhập ----
+
 export function PublicRoute({ children }: PrivateRouteProps) {
     const user = useAuth();
     const navigate = useNavigate();
@@ -39,7 +39,7 @@ export function PublicRoute({ children }: PrivateRouteProps) {
     return <>{children}</>;
 }
 
-// ---- AdminRoute: check đăng nhập + admin ----
+
 export function AdminRoute({ children }: PrivateRouteProps) {
     const user = useAuth();
     const group = user?.account?.groupWithRoles;
@@ -51,7 +51,7 @@ export function AdminRoute({ children }: PrivateRouteProps) {
     return <>{children}</>;
 }
 
-// ---- HomeRedirect: chuyển hướng theo trạng thái đăng nhập ----
+
 export function HomeRedirect() {
     const user = useAuth();
     const navigate = useNavigate();

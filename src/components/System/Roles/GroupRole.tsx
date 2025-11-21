@@ -75,7 +75,7 @@ const GroupRole: React.FC = () => {
                 let result = buildDataRoleByGroup(data.DT.Roles, listRoles);
                 setAssignRoleByGroup(result);
             } else {
-                setAssignRoleByGroup([]); // luôn set default mảng
+                setAssignRoleByGroup([]);
             }
         }
     };
@@ -101,7 +101,6 @@ const GroupRole: React.FC = () => {
 
         setAssignRoleByGroup(updated);
 
-        // Cập nhật trạng thái select all
         const allChecked = updated.every(role => role.isAssigned);
         setIsSelectAll(allChecked);
     };
@@ -143,15 +142,15 @@ const GroupRole: React.FC = () => {
                 return;
             }
 
-            // ép kiểu EC an toàn
+
             const ecNumber = Number(res.EC);
 
             if (!isNaN(ecNumber) && ecNumber === 0) {
-                // xóa thành công → cập nhật state userGroups
+
                 setUserGroups(prev => prev.filter(group => group.id !== id));
                 toast.success(res.EM || "Xóa group thành công!");
             } else {
-                // xóa thất bại → hiển thị thông báo lỗi từ backend
+
                 toast.error(res.EM || "Không thể xóa group!");
             }
         } catch (err) {
@@ -185,7 +184,7 @@ const GroupRole: React.FC = () => {
                         </button>
                     </div>
 
-                    {/* modal */}
+
                     <ModalCreateGroup
                         isOpen={isModalOpen}
                         onClose={() => setIsModalOpen(false)}

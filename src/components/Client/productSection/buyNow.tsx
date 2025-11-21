@@ -29,44 +29,36 @@ export interface BuyNowProduct {
 }
 
 interface BuyNowModalProps {
-    // allow either a full product or a minimal product from the card
     product: Partial<BuyNowProduct> & { id: number };
 }
 
 const BuyNowModal: React.FC<BuyNowModalProps> = ({ product: initialProduct }) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    // local product state that we actually use in modal
     const [product, setProduct] = useState<BuyNowProduct | null>(null);
     const [loadingDetail, setLoadingDetail] = useState(false);
     const navigate = useNavigate();
 
-    // When modal opened, ensure we have full detail (variants, description).
     useEffect(() => {
         if (!isOpen) return;
 
         const ensureDetail = async () => {
-            // quick merge from initialProduct if it already has good data
             const hasVariants = Array.isArray(initialProduct.variants) && initialProduct.variants.length > 0;
             const hasDescription = typeof initialProduct.description === "string" && initialProduct.description.trim() !== "";
 
             if (hasVariants && hasDescription) {
-                // we can use initialProduct but normalize fields
                 const normalized = normalizeToBuyNowProduct(initialProduct as any);
                 setProduct(normalized);
                 return;
             }
 
-            // otherwise fetch full detail from API
             try {
                 setLoadingDetail(true);
                 const res = await getProductById(initialProduct.id);
-                // getProductById expected shape: { EC, EM, DT }
                 if (res?.EC === 0 && res.DT) {
                     const detail = mapApiDetailToBuyNow(res.DT);
                     setProduct(detail);
                 } else {
-                    // fallback to initial (with best effort)
                     setProduct(normalizeToBuyNowProduct(initialProduct as any));
                 }
             } catch (err) {
@@ -80,7 +72,6 @@ const BuyNowModal: React.FC<BuyNowModalProps> = ({ product: initialProduct }) =>
         ensureDetail();
     }, [isOpen, initialProduct]);
 
-    // normalize helpers
     function parsePriceToNumber(input: any) {
         if (input == null) return 0;
         if (typeof input === "number") return input;
@@ -133,11 +124,9 @@ const BuyNowModal: React.FC<BuyNowModalProps> = ({ product: initialProduct }) =>
     }
 
     function mapApiDetailToBuyNow(apiDT: any): BuyNowProduct {
-        // apiDT likely has: id, name, description, thumbnail, variants([...])
         return normalizeToBuyNowProduct(apiDT);
     }
 
-    // useProductVariants hook expects VariantItem[] with fields color,size,image,price,stock
     const normalizedVariantsForHook: VariantItem[] = useMemo(() => {
         if (!product?.variants) return [];
         return product.variants.map(v => ({
@@ -161,7 +150,6 @@ const BuyNowModal: React.FC<BuyNowModalProps> = ({ product: initialProduct }) =>
         price,
     } = useProductVariants(normalizedVariantsForHook, product?.price);
 
-    // selected image logic
     const [selectedImage, setSelectedImage] = useState<string | undefined>(product?.img);
 
     useEffect(() => {
@@ -200,7 +188,6 @@ const BuyNowModal: React.FC<BuyNowModalProps> = ({ product: initialProduct }) =>
             return;
         }
 
-        // Với sản phẩm không có size/color → matchedVariant có thể null
         const variantId = matchedVariant?.id ?? null;
         const finalPrice = matchedVariant?.price ?? product?.price;
 
@@ -233,7 +220,7 @@ const BuyNowModal: React.FC<BuyNowModalProps> = ({ product: initialProduct }) =>
                             <div className="p-8 text-center">Đang tải...</div>
                         ) : (
                             <div className="grid grid-cols-1 lg:grid-cols-2">
-                                {/* LEFT: images */}
+
                                 <div className="bg-gray-50 p-6">
                                     <div className="flex flex-col lg:flex-row gap-4">
                                         {product.images.length > 1 && (
@@ -249,7 +236,6 @@ const BuyNowModal: React.FC<BuyNowModalProps> = ({ product: initialProduct }) =>
                                     </div>
                                 </div>
 
-                                {/* RIGHT: info */}
                                 <div className="p-6">
                                     <h2 className="text-2xl font-bold mb-2">{product.name}</h2>
                                     <p className="text-sm text-gray-600 mb-4">Tình trạng: <span className="font-semibold text-green-600">{product.status}</span></p>
@@ -290,7 +276,6 @@ const BuyNowModal: React.FC<BuyNowModalProps> = ({ product: initialProduct }) =>
                                         </div>
                                     )}
 
-                                    {/* quantity / buy button */}
                                     <div className="mb-6">
                                         <h4 className="font-semibold mb-3">Số lượng</h4>
                                         <div className="flex items-center gap-3">

@@ -65,7 +65,7 @@ const fetchAllProducts = async () => {
 };
 
 const updateProduct = (formData: FormData) => {
-    // Lấy id từ FormData
+
     const productId = formData.get("id")?.toString();
     if (!productId) {
         throw new Error("Product ID missing in FormData!");
@@ -94,7 +94,7 @@ const updateVariant = (variant: FormData | ProductVariantData): Promise<any> => 
 
     if (variant instanceof FormData) {
         formData = variant;
-        // Nếu FormData thì ta không có variant.id (có thể đã append từ trước)
+
         variantId = formData.get("id") as string | undefined;
     } else {
         formData = new FormData();
@@ -109,7 +109,7 @@ const updateVariant = (variant: FormData | ProductVariantData): Promise<any> => 
         variantId = variant.id;
     }
 
-    // Gửi request có kèm id trong URL
+
     return axios.put(`/api/v1/variant/update/${variantId}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
     });
@@ -118,7 +118,7 @@ const updateVariant = (variant: FormData | ProductVariantData): Promise<any> => 
 const deleteVariant = async (id: number) => {
     try {
         const res = await axios.delete(`/api/v1/variant/delete/${id}`);
-        // axios trả res.data
+
         console.log("🟢 deleteVariant response:", res.data);
         return res;
     } catch (err: any) {

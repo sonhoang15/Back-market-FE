@@ -1,14 +1,14 @@
 import React, { useEffect, useState, ReactNode } from "react";
 import { getUserAccount } from "../Services/userService";
 
-// Kiểu dữ liệu cho tài khoản
+
 interface Account {
     email: string;
     username: string;
     groupWithRoles: any;
 }
 
-// Kiểu dữ liệu cho UserContext
+
 export interface UserState {
     isLoading: boolean;
     isAuthenticated: boolean;
@@ -18,17 +18,17 @@ export interface UserState {
     groupWithRoles?: any;
 }
 
-// Kiểu dữ liệu cho Context
+
 interface UserContextType {
     user: UserState;
     loginContext: (userData: UserState) => void;
     logoutContext: () => void;
 }
 
-// Tạo context với kiểu mặc định
+
 const UserContext = React.createContext<UserContextType | null>(null);
 
-// Props cho provider
+
 interface UserProviderProps {
     children: ReactNode;
 }
@@ -45,7 +45,7 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const [user, setUser] = useState<UserState>(userDefault);
 
     const loginContext = (userData: UserState) => {
-        localStorage.setItem("jwt", userData.token); // lưu token lại
+        localStorage.setItem("jwt", userData.token);
         setUser({ ...userData, isLoading: false });
     };
 
@@ -56,7 +56,7 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
     const fetchUser = async (token: string) => {
         try {
-            const response = await getUserAccount(token); // <-- truyền token vào đây
+            const response = await getUserAccount(token);
             if (response && response.EC === 0) {
                 const { groupWithRoles, email, username, access_token } = response.DT;
                 const data: UserState = {
@@ -79,10 +79,10 @@ const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         const token = localStorage.getItem("jwt");
 
         if (token) {
-            // Nếu đã có token thì fetch thông tin user
+
             fetchUser(token);
         } else {
-            // Nếu chưa có token thì coi như logout
+
             setUser({ ...userDefault, isLoading: false });
         }
     }, []);

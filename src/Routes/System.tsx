@@ -25,23 +25,23 @@ class System extends Component<SystemProps> {
     const { user } = this.props;
 
     if (!user.isAuthenticated) {
-      // Nếu chưa đăng nhập thì redirect về login
+
       return <Navigate to="/login" />;
     }
 
     if (user?.account?.groupWithRoles?.id !== 1) {
-      // Nếu không phải admin thì chuyển đến trang không được phép truy cập
+
       return <Navigate to="/home" />;
     }
 
-    // Nếu là admin thì render nội dung hệ thống
+
     return (
       <>
         <Header />
         <div className="system-container">
           <div className="system-list">
             <Routes>
-              {/* khi vào /system thì tự động chuyển sang /system/user */}
+
               <Route index element={<Navigate to="user" replace />} />
 
               <Route path="user" element={<User />} />
@@ -52,7 +52,7 @@ class System extends Component<SystemProps> {
               <Route path="product" element={<ProductPage />} />
               <Route path="order" element={<OrderAdmin />} />
 
-              {/* fallback khác: hiện 404 thay vì quay về /system */}
+
               <Route path="*" element={<div>Page not found in System</div>} />
             </Routes>
 

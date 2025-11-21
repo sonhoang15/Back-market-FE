@@ -30,7 +30,6 @@ export const ProductPage: React.FC = () => {
         if (res?.EC === 0) {
             setProducts(res.DT);
 
-            // ✅ Cập nhật selectedProduct nếu đang chọn
             if (keepSelected && selectedProduct) {
                 const updated = res.DT.find((p: Product) => p.id === selectedProduct.id);
                 if (updated) setSelectedProduct(updated);
@@ -47,14 +46,11 @@ export const ProductPage: React.FC = () => {
         try {
             const res = await updateProduct(formData);
 
-            // ✅ Check API trả về
             if (res?.EC === 0) {
                 toast.success("Cập nhật thành công!");
 
-                // 🔄 Tải lại danh sách sản phẩm
                 await loadProducts();
 
-                // ❎ Đóng modal
                 setEditingProduct(null);
             } else {
                 toast.error(res?.EM || "Cập nhật thất bại");

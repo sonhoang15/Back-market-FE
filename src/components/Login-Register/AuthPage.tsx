@@ -14,7 +14,6 @@ export default function AuthForm() {
                     { "right-panel-active": isRegister }
                 )}
             >
-                {/* Sign Up */}
                 <div
                     className={clsx(
                         "absolute top-0 h-full w-1/2 transition-all duration-700 ease-in-out z-[1] opacity-0",
@@ -24,7 +23,6 @@ export default function AuthForm() {
                     <SignUpForm />
                 </div>
 
-                {/* Sign In */}
                 <div
                     className={clsx(
                         "absolute top-0 h-full w-1/2 transition-all duration-700 ease-in-out z-[2]",
@@ -34,7 +32,6 @@ export default function AuthForm() {
                     <SignInForm />
                 </div>
 
-                {/* Overlay */}
                 <div
                     className={clsx(
                         "absolute top-0 left-1/2 w-1/2 h-full z-[100] overflow-hidden transition-transform duration-700 ease-in-out",
@@ -47,7 +44,7 @@ export default function AuthForm() {
                             { "translate-x-1/2": isRegister }
                         )}
                     >
-                        {/* Overlay left */}
+
                         <div
                             className={clsx(
                                 "absolute top-0 h-full w-1/2 flex flex-col items-center justify-center px-10 text-center transition-transform duration-700 ease-in-out",
@@ -64,7 +61,6 @@ export default function AuthForm() {
                             </button>
                         </div>
 
-                        {/* Overlay right */}
                         <div
                             className={clsx(
                                 "absolute right-0 top-0 h-full w-1/2 flex flex-col items-center justify-center px-10 text-center transition-transform duration-700 ease-in-out",

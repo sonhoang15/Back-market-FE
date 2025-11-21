@@ -100,7 +100,6 @@ const News = () => {
     ];
     return (
         <div className="px-10 pt-10">
-            {/* breadcrumb */}
             <div className="flex w-full h-9 bg-[#f5f5f5] mt-[100px]">
                 <a href="/home" className="no-underline mt-[8px]">
                     <span className="text-black px-3 ml-[30px]">Trang chủ</span>

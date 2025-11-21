@@ -33,7 +33,6 @@ export default function OrderAdminPage() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
-    // Load orders
     useEffect(() => {
         const fetchData = async () => {
             const res = await orderService.getAllOrders();
@@ -58,11 +57,9 @@ export default function OrderAdminPage() {
             if (res.data?.EC === 0) {
                 toast.success("Đơn hàng đã được chuyển sang trạng thái hoàn thành!");
 
-                // Cập nhật danh sách
                 const list = await orderService.getAllOrders();
                 if (list.data?.EC === 0) setOrders(list.data.DT);
 
-                // Cập nhật lại chi tiết
                 const detail = await orderService.getOrderDetail(id);
                 if (detail.data?.EC === 0) setSelectedOrder(detail.data.DT);
             } else {
@@ -120,7 +117,6 @@ export default function OrderAdminPage() {
                 </table>
             </div>
 
-            {/* Drawer hiển thị chi tiết */}
             {selectedOrder && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-end">
                     <div className="w-[480px] bg-white h-full p-6 shadow-xl overflow-y-auto">

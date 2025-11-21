@@ -24,7 +24,7 @@ const Categories: React.FC = () => {
     const getAllCategories = async () => {
         try {
             setLoading(true);
-            const res = await fetchCategories(); // gọi API
+            const res = await fetchCategories();
             if (res && Array.isArray(res.DT)) {
                 setCategories(res.DT);
             } else {
@@ -41,7 +41,6 @@ const Categories: React.FC = () => {
         getAllCategories();
     }, []);
 
-    // Tạo mới category
     const handleCreate = async () => {
         if (!newName.trim()) {
             toast.error("Tên danh mục không được để trống!");
@@ -51,7 +50,6 @@ const Categories: React.FC = () => {
         try {
             const res = await createCategory(newName);
 
-            // Dùng trực tiếp object trả về từ axios
             if (res.EC === 0) {
                 setCategories([res.DT, ...categories]);
                 setNewName("");
@@ -66,16 +64,14 @@ const Categories: React.FC = () => {
     };
 
 
-    // Lưu chỉnh sửa
     const handleUpdate = async () => {
         if (!editingCategory) return;
         try {
-            // ✅ gọi API wrapper thay vì axios trực tiếp
             const res = await updateCategory(editingCategory.id, editName);
 
             if (res && res.EC === 0) {
                 toast.success("Cập nhật thành công!");
-                getAllCategories(); // reload danh sách
+                getAllCategories();
                 setEditingCategory(null);
                 setEditName("");
             } else {
@@ -111,7 +107,6 @@ const Categories: React.FC = () => {
             <div className="p-6 max-w-3xl mx-auto">
                 <h1 className="text-2xl font-bold mb-4">Quản lý Danh mục</h1>
 
-                {/* Thêm mới */}
                 <div className="flex gap-2 mb-6">
                     <input
                         type="text"
@@ -128,7 +123,6 @@ const Categories: React.FC = () => {
                     </button>
                 </div>
 
-                {/* Bảng */}
                 {loading ? (
                     <p>Đang tải...</p>
                 ) : (

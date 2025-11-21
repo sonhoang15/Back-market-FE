@@ -87,7 +87,6 @@ export const useAddProduct = () => {
         }
 
         try {
-            // 🔹 Chuyển thumbnail (chỉ lấy ảnh đầu tiên)
             let thumbnailBase64 = "";
             if (formData.thumbnail[0]) {
                 thumbnailBase64 = formData.thumbnail[0];
@@ -95,7 +94,7 @@ export const useAddProduct = () => {
 
             const productRes = await createProduct({
                 ...formData,
-                thumbnail: formData.thumbnail[0], // ảnh đầu tiên base64
+                thumbnail: formData.thumbnail[0],
             });
 
             if (productRes?.EC !== 0) {
