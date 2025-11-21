@@ -97,6 +97,8 @@ const Roles: React.FC = () => {
                                 <div className="flex-1 min-w-[200px]">
                                     <label className="block mb-1 font-medium">URL:</label>
                                     <input
+                                        aria-label="URL"
+                                        title="URL"
                                         type="text"
                                         className={`w-full border rounded px-3 py-2 outline-none focus:ring-2 ${child.isValidUrl
                                             ? "border-gray-300 focus:ring-blue-500"
@@ -111,6 +113,8 @@ const Roles: React.FC = () => {
                                 <div className="flex-1 min-w-[200px]">
                                     <label className="block mb-1 font-medium">Description:</label>
                                     <input
+                                        aria-label="Description"
+                                        title="Description"
                                         type="text"
                                         className="w-full border border-gray-300 rounded px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
                                         value={child.description}

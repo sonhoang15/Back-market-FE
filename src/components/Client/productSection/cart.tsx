@@ -1,48 +1,87 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ShoppingCart, X, Plus, Minus, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
-import img1 from "../../../assets/anh/103.jpeg";
-import img2 from "../../../assets/anh/104.jpeg";
+import {
+    getCart,
+    updateCartItem,
+    removeCartItem,
+    checkoutCart,
+    Cart,
+    CartItem,
+} from "../../../Services/cartService";
+import { useNavigate } from "react-router-dom";
 
-const CartSidebar = () => {
+const CartSidebar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [cart, setCart] = useState<Cart | null>(null);
+    const navigate = useNavigate();
 
-    // Demo sản phẩm trong giỏ hàng
-    const [cartItems, setCartItems] = useState([
-        { id: 1, name: "Áo thun nam", price: 200000, quantity: 2, image: img1 },
-        { id: 2, name: "Quần jeans nữ", price: 350000, quantity: 1, image: img2 },
-    ]);
+    useEffect(() => {
+        fetchCart(); // load giỏ hàng khi component mount
+    }, []);
 
-    //  Hàm tăng số lượng
-    const increaseQuantity = (id: number) => {
-        setCartItems((prev) =>
-            prev.map((item) =>
-                item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-            )
-        );
+    useEffect(() => {
+        if (isOpen) {
+            fetchCart(); // load lại khi mở sidebar
+        }
+    }, [isOpen]);
+
+    // Thêm 1 hàm fetch lại cart
+    const fetchCart = async () => {
+        try {
+            const data = await getCart();
+            setCart(data);
+        } catch (err) {
+            console.error("Error fetching cart:", err);
+        }
     };
 
-    //  Hàm giảm số lượng
-    const decreaseQuantity = (id: number) => {
-        setCartItems((prev) =>
-            prev.map((item) =>
-                item.id === id && item.quantity > 1
-                    ? { ...item, quantity: item.quantity - 1 }
-                    : item
-            )
-        );
+    // Tăng số lượng
+    const handleIncrease = async (item: CartItem) => {
+        try {
+            await updateCartItem(item.id, item.quantity + 1);
+            await fetchCart(); // fetch lại cart mới
+        } catch (err) {
+            console.error(err);
+        }
     };
 
-    //  Xóa sản phẩm
-    const removeItem = (id: number) => {
-        setCartItems((prev) => prev.filter((item) => item.id !== id));
+    // Giảm số lượng
+    const handleDecrease = async (item: CartItem) => {
+        if (item.quantity <= 1) return;
+        try {
+            await updateCartItem(item.id, item.quantity - 1);
+            await fetchCart(); // fetch lại cart mới
+        } catch (err) {
+            console.error(err);
+        }
     };
 
-    // Tổng số sản phẩm
-    const totalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+    // Xóa item
+    const handleRemove = async (item: CartItem) => {
+        try {
+            await removeCartItem(item.id);
+            await fetchCart(); // fetch lại cart mới
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
-    // Tổng tiền
-    const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    // Checkout
+    const handleCheckout = () => {
+        // 1) chuyển sang trang /checkout
+        navigate(`/checkout?cart_id=${cart?.id}`);
+        // 2) đóng modal giỏ hàng
+        setIsOpen(false);
+    };
+
+
+    const totalQuantity = cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
+    const totalPrice = cart?.items?.reduce(
+        (sum, item) => sum + parseFloat(item.total_price.toString()),
+        0
+    ) || 0;
+
 
     return (
         <div>
@@ -63,58 +102,67 @@ const CartSidebar = () => {
                 />
             )}
 
-            {/* Sidebar giỏ hàng */}
+            {/* Sidebar giỏ hàng (1/2 màn hình) */}
             <div
-                className={`fixed top-0 right-0 h-full w-96 bg-white shadow-2xl transform transition-transform duration-300 z-50 
+                className={`fixed top-0 right-0 h-full w-1/2 md:w-1/3 bg-white shadow-2xl transform transition-transform duration-300 z-50 
           ${isOpen ? "translate-x-0" : "translate-x-full"}`}
             >
                 {/* Header */}
                 <div className="flex justify-between items-center p-4 border-b">
                     <h2 className="text-lg font-semibold">Giỏ hàng</h2>
-                    <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-gray-100 rounded-full">
+                    <button
+                        onClick={() => setIsOpen(false)}
+                        className="p-2 hover:bg-gray-100 rounded-full"
+                        title="Đóng giỏ hàng"
+                    >
                         <X size={20} />
                     </button>
                 </div>
 
                 {/* Danh sách sản phẩm */}
                 <div className="p-4 space-y-4 overflow-y-auto h-[calc(100%-140px)]">
-                    {cartItems.length > 0 ? (
-                        cartItems.map((item) => (
+                    {cart?.items?.length ? (
+                        cart.items.map((item) => (
                             <div
                                 key={item.id}
                                 className="flex items-center gap-4 border-b pb-3 p-2 rounded relative"
                             >
-                                {/* Ảnh */}
-                                <Link
-                                    to={`/product/${item.id}`}
-                                    onClick={() => setIsOpen(false)}
-                                >
+                                {/* Ảnh sản phẩm / variant */}
+                                <Link to={`/product/${item.product_id}`} onClick={() => setIsOpen(false)}>
                                     <img
-                                        src={item.image}
-                                        alt={item.name}
+                                        src={item.variant?.image || item.product?.thumbnail || ""}
+                                        alt={item.product?.name}
                                         className="w-16 h-16 object-cover rounded"
                                     />
                                 </Link>
 
-                                {/* Thông tin */}
+                                {/* Thông tin sản phẩm */}
                                 <div className="flex-1">
-                                    <h3 className="font-medium">{item.name}</h3>
-                                    <p className="text-sm text-gray-600">
-                                        {item.price.toLocaleString()}đ
-                                    </p>
+                                    <h3 className="font-medium">{item.product?.name}</h3>
+
+                                    {/* Hiển thị variant name và size */}
+                                    {item.variant && (
+                                        <p className="text-sm text-gray-600">
+                                            {item.variant.name} {item.variant.size ? `- Size: ${item.variant.size}` : ""}
+                                        </p>
+                                    )}
+
+                                    <p className="text-sm text-gray-600">{item.price.toLocaleString()}đ</p>
 
                                     {/* Nút tăng giảm số lượng */}
                                     <div className="flex items-center mt-2 space-x-2">
                                         <button
-                                            onClick={() => decreaseQuantity(item.id)}
+                                            onClick={() => handleDecrease(item)}
                                             className="p-1 border rounded hover:bg-gray-100"
+                                            title="Giảm số lượng"
                                         >
                                             <Minus size={14} />
                                         </button>
                                         <span className="px-2">{item.quantity}</span>
                                         <button
-                                            onClick={() => increaseQuantity(item.id)}
+                                            onClick={() => handleIncrease(item)}
                                             className="p-1 border rounded hover:bg-gray-100"
+                                            title="Tăng số lượng"
                                         >
                                             <Plus size={14} />
                                         </button>
@@ -124,11 +172,12 @@ const CartSidebar = () => {
                                 {/* Tổng giá */}
                                 <div className="flex flex-col items-end">
                                     <p className="font-semibold">
-                                        {(item.price * item.quantity).toLocaleString()}đ
+                                        {item.total_price.toLocaleString()}đ
                                     </p>
                                     <button
-                                        onClick={() => removeItem(item.id)}
+                                        onClick={() => handleRemove(item)}
                                         className="text-red-500 hover:text-red-700 mt-2"
+                                        title="Xóa khỏi giỏ hàng"
                                     >
                                         <Trash2 size={16} />
                                     </button>
@@ -146,7 +195,10 @@ const CartSidebar = () => {
                         <span>Tổng cộng:</span>
                         <span>{totalPrice.toLocaleString()}đ</span>
                     </div>
-                    <button className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    <button
+                        onClick={handleCheckout}
+                        className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    >
                         Thanh toán
                     </button>
                 </div>

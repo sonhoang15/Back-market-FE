@@ -1,70 +1,27 @@
-import img1 from "../../../assets/anh/1.jpeg";
-import img2 from "../../../assets/anh/2.jpeg";
-import img3 from "../../../assets/anh/3.jpeg";
-import img4 from "../../../assets/anh/4.jpeg";
-
+import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
+import * as clientService from "../../../Services/clientSevice";
+import { normalizeProduct } from "./ProductCard";
 
-const products = [
-  {
-    id: 1,
-    name: 'Dây Lưng Karik 0029',
-    price: '449.000₫',
-    img: img1,
-    thumbnails: [img1, img2],
-  },
-  {
-    id: 2,
-    name: 'Dây Lưng Karik 0028',
-    price: '449.000₫',
-    img: img2,
-    thumbnails: [img2, img3],
-  },
-  {
-    id: 3,
-    name: 'Dây Lưng Karik 0024',
-    price: '449.000₫',
-    img: img3,
-    thumbnails: [img3, img4],
-  },
-  {
-    id: 4,
-    name: 'Dây Lưng Karik 0027',
-    price: '449.000₫',
-    img: img4,
-    thumbnails: [img4, img1],
-  },
-  {
-    id: 5,
-    name: 'Dây Lưng Karik 0029',
-    price: '449.000₫',
-    img: img1,
-    thumbnails: [img1, img2],
-  },
-  {
-    id: 6,
-    name: 'Dây Lưng Karik 0028',
-    price: '449.000₫',
-    img: img2,
-    thumbnails: [img2, img3],
-  },
-  {
-    id: 7,
-    name: 'Dây Lưng Karik 0024',
-    price: '449.000₫',
-    img: img3,
-    thumbnails: [img3, img4],
-  },
-  {
-    id: 8,
-    name: 'Dây Lưng Karik 0027',
-    price: '449.000₫',
-    img: img4,
-    thumbnails: [img4, img1],
-  },
-];
+
+export interface Product {
+  id: number;
+  name: string;
+  price: number;
+  img: string;
+  thumbnails: string[];
+}
 
 export default function NewProduct() {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    clientService.getNewestProducts(8).then(res => {
+      const normalized = res.data.DT.map((p: any) => normalizeProduct(p));
+      setProducts(normalized);
+    });
+  }, []);
+
   return (
     <div className="form-top px-4 py-8">
       <h1 className="text-2xl font-bold text-center mb-6 uppercase">Sản phẩm mới</h1>

@@ -8,6 +8,7 @@ import { UserState } from "../context/UserContext";
 import AdminAddProduct from '../components/System/ManagerProduct/AdminAddProduct';
 import Category from '../components/System/ManagerProduct/Category';
 import { ProductPage } from '../components/System/ManagerProduct/Product';
+import OrderAdmin from '../components/System/ManagerProduct/OrderAdmin';
 
 interface User {
   isLoggedIn: boolean;
@@ -49,6 +50,7 @@ class System extends Component<SystemProps> {
               <Route path="add-product" element={<AdminAddProduct />} />
               <Route path="category" element={<Category />} />
               <Route path="product" element={<ProductPage />} />
+              <Route path="order" element={<OrderAdmin />} />
 
               {/* fallback khác: hiện 404 thay vì quay về /system */}
               <Route path="*" element={<div>Page not found in System</div>} />

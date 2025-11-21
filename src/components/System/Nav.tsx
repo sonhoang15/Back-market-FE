@@ -20,7 +20,7 @@ const NavHeader: React.FC = () => {
             localStorage.removeItem('jwt');
             if (data && +data.EC === 0) {
                 toast.success("Logout succeeded...");
-                navigate('/login');
+                navigate('/auth');
             } else {
                 toast.error(data.EM || "Logout failed");
             }
@@ -132,6 +132,15 @@ const NavHeader: React.FC = () => {
                     >
                         Products
                     </NavLink>
+                    <NavLink
+                        to="/system/order"
+                        className={({ isActive }) =>
+                            `px-3 py-1 border border-gray-700 rounded hover:bg-gray-800 ${isActive ? "bg-gray-800 text-white" : ""
+                            }`
+                        }
+                    >
+                        Orders
+                    </NavLink>
                 </nav>
 
 
@@ -142,6 +151,9 @@ const NavHeader: React.FC = () => {
                             <span>Hello {user.account.username}</span>
                             <div className="relative">
                                 <button
+                                    aria-label="Setting"
+                                    title="Setting"
+                                    type="button"
                                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                                     className="px-3 py-1 border border-gray-700 rounded hover:bg-gray-800"
                                     aria-haspopup="true"
@@ -221,6 +233,16 @@ const NavHeader: React.FC = () => {
                     >
                         category
                     </NavLink>
+                    <NavLink
+                        to="/system/order"
+                        onClick={() => setIsMenuOpen(false)}
+                        className={({ isActive }) =>
+                            "block nav-link menus " + (isActive ? "font-semibold underline" : "")
+                        }
+                    >
+                        Orders
+                    </NavLink>
+
 
                     <div className="border-t border-gray-700 pt-3">
                         {user && user.isAuthenticated ? (

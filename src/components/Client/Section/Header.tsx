@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import { Search, Phone, User, Menu, X } from 'lucide-react';
 import { useLocation, NavLink, useNavigate } from 'react-router-dom';
 import logo from "../../../assets/anh/logo.png";
@@ -6,9 +6,9 @@ import CartSidebar from '../productSection/cart';
 import { toast } from "react-toastify";
 import { UserContext } from "../../../context/UserContext";
 import { logOutUser } from "../../../Services/userService";
+import { searchProducts } from "../../../Services/clientSevice";
 
 const Header = () => {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSticky, setIsSticky] = useState(false);
@@ -18,32 +18,43 @@ const Header = () => {
   const location = useLocation();
   const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
+  const [searchResults, setSearchResults] = useState([]);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  // Lắng nghe scroll để bật/tắt sticky
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY === 0) {
-        setShowTopBar(true);  // hiện topbar khi ở đầu trang
+        setShowTopBar(true);
       } else {
-        setShowTopBar(false); // ẩn topbar khi cuộn xuống
+        setShowTopBar(false);
       }
 
-      setIsSticky(window.scrollY > 40); // sticky khi cuộn >40px
+      setIsSticky(window.scrollY > 40);
     };
 
     window.addEventListener("scroll", handleScroll);
-    handleScroll(); // gọi hàm ngay để thiết lập trạng thái ban đầu
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Lấy role từ localStorage
   useEffect(() => {
-    const role = localStorage.getItem("role"); // "admin" hoặc "customer"
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setShowMenu(false); // 🔥 tự đóng dropdown
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    const role = localStorage.getItem("role");
     setUserRole(role);
   }, []);
 
   const handleAdminClick = () => {
-    navigate('/system'); // chuyển hướng tới trang admin
+    navigate('/system');
   };
 
   const handleLogout = async () => {
@@ -55,7 +66,7 @@ const Header = () => {
 
       if (data && +data.EC === 0) {
         toast.success("Logout succeeds...");
-        navigate("/auth"); // v6 dùng navigate thay cho history.push
+        navigate("/auth");
       } else {
         toast.error(data?.EM || "Logout failed");
       }
@@ -64,6 +75,20 @@ const Header = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    const delay = setTimeout(async () => {
+      if (searchQuery.trim().length > 1) {
+        const res = await searchProducts(searchQuery);
+        if (res.EC === 0) setSearchResults(res.DT);
+      } else {
+        setSearchResults([]);
+      }
+    }, 300);
+
+    return () => clearTimeout(delay);
+  }, [searchQuery]);
+
   if (user && user.isAuthenticated === true || location.pathname === '/home' || location.pathname === '/news') {
     return (
       <header className="w-full">
@@ -96,12 +121,40 @@ const Header = () => {
 
                   {showMenu && (
                     <div className="absolute right-0 mt-2 w-32 bg-white border rounded-lg shadow-lg z-50">
-                      <button
-                        onClick={handleLogout}
-                        className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-                      >
-                        Đăng xuất
-                      </button>
+
+                      {/* Nút Profile */}
+                      {showMenu && (
+                        <div
+                          ref={menuRef}
+                          className="absolute right-0 mt-2 w-32 bg-white border rounded-lg shadow-lg z-50"
+                        >
+                          <button
+                            onClick={() => {
+                              setShowMenu(false);
+                              navigate("/profile");
+                            }}
+                            className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                          >
+                            Profile
+                          </button>
+
+                          <button
+                            onClick={handleLogout}
+                            className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                          >
+                            Đăng xuất
+                          </button>
+
+                          {user?.account?.groupWithRoles?.id === 1 && (
+                            <button
+                              onClick={handleAdminClick}
+                              className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                            >
+                              Quản Trị
+                            </button>
+                          )}
+                        </div>
+                      )}
                       {/* Admin button */}
                       {user?.account?.groupWithRoles?.id === 1 && (
                         <button
@@ -152,17 +205,34 @@ const Header = () => {
                   placeholder="Nhập từ khóa..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && searchQuery.trim() !== "") {
+                      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+                    }
+                  }}
                   className="w-full pl-4 pr-10 py-2 border border-black rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
+
                 <button
-                  onClick={() => setIsSearchOpen(!isSearchOpen)}
+                  type="button"
+                  aria-label="Search"
+                  title="Search"
+                  onClick={() => {
+                    if (searchQuery.trim() !== "") {
+                      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+                    }
+                  }}
                   className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 p-1 rounded-full"
                 >
                   <Search size={20} />
                 </button>
               </div>
+
               {/* Mobile menu button */}
               <button
+                type="button"
+                aria-label="Search"
+                title="Search"
                 onClick={() => setMobileMenu(true)}
                 className="md:hidden p-2 rounded-lg hover:bg-gray-100"
               >
@@ -182,6 +252,9 @@ const Header = () => {
             {/* Sidebar */}
             <div className="absolute left-0 top-0 h-full w-64 bg-white shadow-lg p-6 animate-slideIn">
               <button
+                type="button"
+                aria-label="Search"
+                title="Search"
                 onClick={() => setMobileMenu(false)}
                 className="mb-6 p-2 rounded-lg active:bg-gray-200"
               >

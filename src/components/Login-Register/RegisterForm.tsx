@@ -8,13 +8,11 @@ const SignUpForm = () => {
     const [email, setEmail] = React.useState("");
     const [username, setUserName] = React.useState("");
     const [phone, setPhone] = React.useState("");
-    const [address, setAddress] = React.useState("");
     const [password, setPassword] = React.useState("");
     const defaultInput = {
         isValidEmail: true,
         isValidUserName: true,
         isValidPhone: true,
-        isValidAddress: true,
         isValidSex: true,
         isValidPassword: true,
         isValidRePassword: true
@@ -23,12 +21,11 @@ const SignUpForm = () => {
 
     const isValidInput = () => {
         setObjectCheckInput({ ...defaultInput });
-        if (!email || !username || !phone || !address || !password) {
+        if (!email || !username || !phone || !password) {
             setObjectCheckInput({
                 isValidEmail: false,
                 isValidUserName: false,
                 isValidPhone: false,
-                isValidAddress: false,
                 isValidSex: false,
                 isValidPassword: false,
                 isValidRePassword: false
@@ -60,13 +57,12 @@ const SignUpForm = () => {
     const handleSignUp = async () => {
         let check = isValidInput();
         if (check === true) {
-            let severData = await RegisterService(email, username, phone, address, password);
+            let severData = await RegisterService(email, username, phone, password);
             if (+severData.EC === 0) {
                 toast.success(severData.EM);
                 setEmail('');
                 setUserName('');
                 setPhone('');
-                setAddress('');
                 setPassword('');
                 setObjectCheckInput({ ...defaultInput });
             } else {
@@ -100,14 +96,6 @@ const SignUpForm = () => {
                 ${objectCheckInput.isValidPhone ? 'border-2' : 'border-2 border-red-500 bg-red-100'}`}
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-            />
-            <input
-                type="address"
-                placeholder="Address"
-                className={`bg-[#eee] p-3 mb-2 w-full outline-none transition-all duration-200 rounded
-                ${objectCheckInput.isValidAddress ? 'border-2' : 'border-2 border-red-500 bg-red-100'}`}
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
             />
             <input
                 type="password"

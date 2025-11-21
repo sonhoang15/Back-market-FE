@@ -41,6 +41,8 @@ const NewsSection = () => {
             {news.map((article, index) => (
               <div key={index} className="group">
                 <img
+                  aria-label="News Image"
+                  title="News Image"
                   src={article.image}
                   className="mb-4 w-full h-40 object-cover rounded cursor-pointer"
                 />

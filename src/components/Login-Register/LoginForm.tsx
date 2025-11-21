@@ -90,14 +90,13 @@ const SignInForm = () => {
     return (
         <>
             {isLoading ? (
-                <div className='loading-container'>
+                <div className="flex justify-center items-center w-full h-full">
                     <ClimbingBoxLoader
                         color="green"
                         loading
                         size={20}
                         speedMultiplier={1}
                     />
-                    <div className='loading'>loading ...</div>
                 </div>
             ) : (
                 <div className="flex flex-col items-center justify-center h-full px-[50px] text-center bg-white">

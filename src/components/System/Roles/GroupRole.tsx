@@ -40,6 +40,7 @@ const GroupRole: React.FC = () => {
     const [assignRoleByGroup, setAssignRoleByGroup] = useState<RoleWithAssign[]>([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [groups, setGroups] = useState<any[]>([]);
+    const [isSelectAll, setIsSelectAll] = useState(false);
 
 
     useEffect(() => {
@@ -94,12 +95,15 @@ const GroupRole: React.FC = () => {
     };
 
     const handleSelectRoles = (value: string) => {
-        const _assignRoleByGroup = _.cloneDeep(assignRoleByGroup);
-        let foundIndex = _assignRoleByGroup.findIndex(item => +item.id === +value);
-        if (foundIndex > -1) {
-            _assignRoleByGroup[foundIndex].isAssigned = !_assignRoleByGroup[foundIndex].isAssigned;
-        }
-        setAssignRoleByGroup(_assignRoleByGroup);
+        const updated = assignRoleByGroup.map(role =>
+            role.id === +value ? { ...role, isAssigned: !role.isAssigned } : role
+        );
+
+        setAssignRoleByGroup(updated);
+
+        // Cập nhật trạng thái select all
+        const allChecked = updated.every(role => role.isAssigned);
+        setIsSelectAll(allChecked);
     };
 
     const buildDataToSave = (): AssignToGroupData => {
@@ -156,8 +160,20 @@ const GroupRole: React.FC = () => {
         }
     };
 
+    const handleSelectAll = () => {
+        const newValue = !isSelectAll;
+        setIsSelectAll(newValue);
+
+        const updated = assignRoleByGroup.map(role => ({
+            ...role,
+            isAssigned: newValue
+        }));
+
+        setAssignRoleByGroup(updated);
+    };
+
     return (
-        <div className="group-role-container">
+        <div className="group-role-container px-12">
             <div className="container mt-3 mx-auto">
                 <div className="p-4">
                     <div className="flex justify-between items-center mb-4">
@@ -195,6 +211,8 @@ const GroupRole: React.FC = () => {
                     <div className="w-full sm:w-1/2 mb-4">
                         <label className="block mb-2 font-medium">Select Group:</label>
                         <select
+                            aria-label="Select Group"
+                            title="Select Group"
                             className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             onChange={(event) => handleOnchangeGroup(event.target.value)}
                         >
@@ -213,6 +231,17 @@ const GroupRole: React.FC = () => {
                     {selectGroup && (
                         <div className="roles">
                             <h5 className="text-md font-semibold mb-3">Assign Roles:</h5>
+                            <div className="flex items-center mb-3">
+                                <input
+                                    aria-label="checkbox"
+                                    title="checkbox"
+                                    type="checkbox"
+                                    className="h-4 w-4"
+                                    checked={isSelectAll}
+                                    onChange={handleSelectAll}
+                                />
+                                <label className="ml-2 font-medium">Select All</label>
+                            </div>
                             {assignRoleByGroup &&
                                 assignRoleByGroup.length > 0 &&
                                 assignRoleByGroup.map((item, index) => (

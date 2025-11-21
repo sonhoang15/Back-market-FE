@@ -17,14 +17,12 @@ const RegisterService = (
     email: string,
     username: string,
     phone: string,
-    address: string,
     password: string
 ): Promise<any> => {
     return axios.post("/api/v1/register", {
         email,
         username,
         phone,
-        address,
         password,
     });
 };
