@@ -37,8 +37,8 @@ export default function CheckoutForm() {
         const fetchProfile = async () => {
             try {
                 const res = await getProfile();
-                if (res.data.EC === 0 && res.data.DT) {
-                    const p = res.data.DT;
+                if (res.EC === 0 && res.DT) {
+                    const p = res.DT;
                     setForm((prev) => ({
                         ...prev,
                         username: p.username || "",
@@ -92,7 +92,7 @@ export default function CheckoutForm() {
                 if (productId) {
                     const res: any = await getProductById(Number(productId));
 
-                    const p = res.data?.DT ?? res.DT;
+                    const p = res?.DT ?? res.DT;
 
                     if (!p) {
                         toast.error("Không tìm thấy sản phẩm");
@@ -192,8 +192,8 @@ export default function CheckoutForm() {
             };
 
             const emailRes = await sendOrderEmail(payload);
-            if (emailRes.data.EC !== 0) {
-                toast.error(emailRes.data.EM);
+            if (emailRes.EC !== 0) {
+                toast.error(emailRes.EM);
                 return;
             }
 
