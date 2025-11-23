@@ -14,6 +14,8 @@ const PersonalInfoForm: React.FC = () => {
         address: "",
     });
 
+
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -41,6 +43,8 @@ const PersonalInfoForm: React.FC = () => {
 
         fetchData();
     }, []);
+
+
 
     const handleChange = (field: keyof Profile, value: string) => {
         setInfo((prev) => ({ ...prev, [field]: value }));

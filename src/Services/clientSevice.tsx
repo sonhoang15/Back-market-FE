@@ -1,5 +1,4 @@
-// src/services/productApi.js
-import axios from "axios";
+import axios from "../setup/axios";
 
 export interface Profile {
     username?: string;
