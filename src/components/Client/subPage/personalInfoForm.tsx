@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { getProfile, updateProfile, Profile } from "../../../Services/clientSevice";
+import { getProfile, updateProfile } from "../../../Services/profileService";
+import { Profile } from "../../../Services/clientSevice";
 import { toast } from "react-toastify";
 
 const PersonalInfoForm: React.FC = () => {
@@ -21,8 +22,8 @@ const PersonalInfoForm: React.FC = () => {
             try {
                 const res = await getProfile();
 
-                if (res.data.EC === 0) {
-                    const user = res.data.DT;
+                if (res.EC === 0) {
+                    const user = res.DT;
 
                     setInfo({
                         username: user.username || "",
@@ -73,10 +74,10 @@ const PersonalInfoForm: React.FC = () => {
         try {
             const res = await updateProfile(info);
 
-            if (res.data.EC === 0) {
+            if (res.EC === 0) {
                 toast.success("Cập nhật thành công!");
             } else {
-                toast.warning(res.data.EM);
+                toast.warning(res.EM);
             }
         } catch (err) {
             console.error(err);

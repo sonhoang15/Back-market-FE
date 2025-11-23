@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getProfile, sendOrderEmail, saveOrder } from "../../../Services/clientSevice";
+import { getProfile, sendOrderEmail, saveOrder } from "../../../Services/profileService";
 import { getCart } from "../../../Services/cartService";
 import { getProductById } from "../../../Services/productService";
 import { clearCart } from "../../../Services/cartService";
