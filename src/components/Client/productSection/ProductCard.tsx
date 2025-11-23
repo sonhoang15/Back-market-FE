@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import BuyNowModal from "./buyNow";
 import { Link } from "react-router-dom";
+import { UserContext } from "../../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export interface Product {
     id: number;
@@ -117,7 +119,8 @@ function parsePriceToNumber(input: number | string | undefined): number {
 
 export default function ProductCard({ product }: ProductCardProps) {
     const [currentImage, setCurrentImage] = useState(product.img);
-
+    const { user } = useContext(UserContext)!;
+    const navigate = useNavigate();
     const uniqueThumbnails = Array.from(
         new Set([product.img, ...(product.thumbnails || [])].filter(Boolean))
     );
@@ -179,6 +182,14 @@ export default function ProductCard({ product }: ProductCardProps) {
         variants: formattedVariants,
     };
 
+    const handleDetail = () => {
+        if (!user || !user.isAuthenticated) {
+            navigate("/auth");
+            return;
+        }
+        navigate(`/product/${product.id}`);
+    };
+
     return (
         <div className="product-item shadow-lg p-4">
             <div className="product-top mb-4">
@@ -233,9 +244,9 @@ export default function ProductCard({ product }: ProductCardProps) {
                 <ul className="flex justify-around border border-black p-[10px] ">
                     <BuyNowModal product={modalProduct} />
                     <li>
-                        <Link to={`/product/${product.id}`} className="text-black hover:text-gray-400">
+                        <button onClick={handleDetail} className="text-black hover:text-gray-400">
                             Chi Tiết
-                        </Link>
+                        </button>
                     </li>
                 </ul>
             </div>

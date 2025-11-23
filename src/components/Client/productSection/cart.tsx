@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { ShoppingCart, X, Plus, Minus, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
@@ -10,27 +10,26 @@ import {
     CartItem,
 } from "../../../Services/cartService";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../../../context/UserContext";
 
 const CartSidebar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [cart, setCart] = useState<Cart | null>(null);
     const navigate = useNavigate();
-
+    const { user } = useContext(UserContext)!;
     useEffect(() => {
-        fetchCart();
-    }, []);
-
-    useEffect(() => {
-        if (isOpen) {
+        if (isOpen && user.isAuthenticated) {
             fetchCart();
+
         }
-    }, [isOpen]);
+    }, [isOpen, user.isAuthenticated]);
 
     const fetchCart = async () => {
         try {
             const data = await getCart();
             setCart(data);
-        } catch (err) {
+        }
+        catch (err) {
             console.error("Error fetching cart:", err);
         }
     };
@@ -68,6 +67,13 @@ const CartSidebar: React.FC = () => {
         setIsOpen(false);
     };
 
+    const handleCartClick = () => {
+        if (!user.isAuthenticated) {
+            navigate("/auth");
+        } else {
+            setIsOpen(true);
+        }
+    };
 
     const totalQuantity = cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
     const totalPrice = cart?.items?.reduce(
@@ -79,7 +85,7 @@ const CartSidebar: React.FC = () => {
     return (
         <div>
             <div
-                onClick={() => setIsOpen(true)}
+                onClick={handleCartClick}
                 className="flex items-center space-x-1 cursor-pointer hover:text-blue-600"
             >
                 <ShoppingCart size={18} />

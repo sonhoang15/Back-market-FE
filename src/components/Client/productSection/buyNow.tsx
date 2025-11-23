@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useContext } from "react";
 import { useProductVariants, VariantItem } from "../useProductVariants";
 import { getProductById } from "../../../Services/productService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { UserContext } from "../../../context/UserContext";
 
 export interface BuyNowProductVariant {
     id?: number;
@@ -34,7 +35,7 @@ interface BuyNowModalProps {
 
 const BuyNowModal: React.FC<BuyNowModalProps> = ({ product: initialProduct }) => {
     const [isOpen, setIsOpen] = useState(false);
-
+    const { user } = useContext(UserContext)!;
     const [product, setProduct] = useState<BuyNowProduct | null>(null);
     const [loadingDetail, setLoadingDetail] = useState(false);
     const navigate = useNavigate();
@@ -207,7 +208,16 @@ const BuyNowModal: React.FC<BuyNowModalProps> = ({ product: initialProduct }) =>
 
     return (
         <div>
-            <button onClick={() => setIsOpen(true)} className="text-black pr-[50px] mr-[-30px] border-r border-black hover:text-gray-400 transition-colors duration-200">
+            <button
+                onClick={() => {
+                    if (!user || !user.isAuthenticated) {
+                        navigate("/auth");
+                        return;
+                    }
+                    setIsOpen(true);
+                }}
+                className="text-black pr-[50px] mr-[-30px] border-r border-black hover:text-gray-400 transition-colors duration-200"
+            >
                 Mua ngay
             </button>
 
