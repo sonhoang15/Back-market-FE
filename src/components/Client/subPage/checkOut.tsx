@@ -65,8 +65,6 @@ export default function CheckoutForm() {
                 if (cartId) {
                     const res: any = await getCart();
 
-                    console.log("getCart RAW:", res);
-
                     const cart = res;
 
                     if (!cart || !cart.items) {
@@ -92,7 +90,7 @@ export default function CheckoutForm() {
                 if (productId) {
                     const res: any = await getProductById(Number(productId));
 
-                    const p = res?.DT ?? res.DT;
+                    const p = res?.data?.DT ?? res.DT;
 
                     if (!p) {
                         toast.error("Không tìm thấy sản phẩm");
@@ -196,8 +194,8 @@ export default function CheckoutForm() {
                 toast.error(emailRes.EM);
                 return;
             }
-
             const orderRes = await saveOrder(payload);
+            console.log("orderRes:", orderRes);
 
             if (orderRes.EC === 0) {
                 if (!isBuyNow && cartId) {

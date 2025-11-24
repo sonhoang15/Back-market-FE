@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import * as orderService from "../../../Services/clientSevice";
+import * as orderService from "../../../Services/profileService";
 import { toast } from "react-toastify";
 
 export interface Order {
@@ -36,8 +36,8 @@ export default function OrderAdminPage() {
     useEffect(() => {
         const fetchData = async () => {
             const res = await orderService.getAllOrders();
-            if (res.data?.EC === 0) {
-                setOrders(res.data.DT);
+            if (res?.EC === 0) {
+                setOrders(res.DT);
             }
         };
         fetchData();
@@ -45,25 +45,26 @@ export default function OrderAdminPage() {
 
     const handleViewDetail = async (id: number) => {
         const res = await orderService.getOrderDetail(id);
-        if (res.data?.EC === 0) {
-            setSelectedOrder(res.data.DT);
+        if (res?.EC === 0) {
+            setSelectedOrder(res.DT);
         }
     };
+
 
     const handleShipOrder = async (id: number) => {
         try {
             const res = await orderService.updateOrderStatus(id, "completed");
 
-            if (res.data?.EC === 0) {
+            if (res?.EC === 0) {
                 toast.success("Đơn hàng đã được chuyển sang trạng thái hoàn thành!");
 
                 const list = await orderService.getAllOrders();
-                if (list.data?.EC === 0) setOrders(list.data.DT);
+                if (list?.EC === 0) setOrders(list.DT);
 
                 const detail = await orderService.getOrderDetail(id);
-                if (detail.data?.EC === 0) setSelectedOrder(detail.data.DT);
+                if (detail?.EC === 0) setSelectedOrder(detail.DT);
             } else {
-                toast.error(res.data?.EM || "Có lỗi xảy ra!");
+                toast.error(res?.EM || "Có lỗi xảy ra!");
             }
         } catch (error) {
             toast.error("Không thể cập nhật đơn hàng!");

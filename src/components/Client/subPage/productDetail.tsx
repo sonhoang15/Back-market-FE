@@ -143,19 +143,40 @@ function ProductDetail() {
     };
 
     const handleBuyNow = () => {
-        if (!matchedVariant) {
-            toast.warn("Vui lòng chọn màu và size trước khi mua ngay");
+        const hasColors = variants.some(v => v.color);
+        const hasSizes = variants.some(v => v.size);
+
+        if (hasColors && !selectedColor) {
+            toast.error("Vui lòng chọn màu!");
             return;
         }
 
-        navigate("/checkout", {
+        if (hasSizes && !selectedSize) {
+            toast.error("Vui lòng chọn size!");
+            return;
+        }
+
+        if (!matchedVariant) {
+            toast.error("Không tìm thấy biến thể hợp lệ!");
+            return;
+        }
+
+        if (quantity > matchedVariant.stock) {
+            toast.error(`Chỉ còn ${matchedVariant.stock} sản phẩm`);
+            return;
+        }
+
+        const variantId = matchedVariant.id;
+        const finalPrice = matchedVariant.price ?? product?.price;
+
+        navigate(`/checkout?product_id=${product?.id}`, {
             state: {
                 type: "buy-now",
-                product_id: product?.id,
-                variant_id: matchedVariant.id,
-                price: matchedVariant.price,
-                quantity: quantity
-            },
+                productId: product?.id,
+                variantId,
+                quantity,
+                price: Number(finalPrice),
+            }
         });
     };
 

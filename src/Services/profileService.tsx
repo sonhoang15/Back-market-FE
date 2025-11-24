@@ -21,7 +21,7 @@ export const saveOrder = async (payload: OrderEmailPayload) => {
                 Authorization: `Bearer ${localStorage.getItem("jwt")}`
             }
         });
-        return res.data;
+        return res;
     } catch (err) {
         return { EC: 1, EM: "Lỗi gọi API lưu đơn hàng!" };
     }

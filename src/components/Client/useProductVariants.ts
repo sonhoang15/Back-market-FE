@@ -31,11 +31,20 @@ export const useProductVariants = (variants: VariantItem[] = [], productPrice?: 
     }, [selectedColor, groupedByColor]);
 
     const matchedVariant = useMemo(() => {
-        return variants.find(v =>
-            (selectedColor ? v.color === selectedColor : true) &&
-            (selectedSize ? v.size === selectedSize : true)
-        ) || null;
+        const hasColor = variants.some(v => v.color);
+        const hasSize = variants.some(v => v.size);
+
+        return variants.find(v => {
+            if (hasColor && selectedColor && v.color !== selectedColor) return false;
+            if (hasSize && selectedSize && v.size !== selectedSize) return false;
+
+            if (hasColor && !selectedColor) return false;
+            if (hasSize && !selectedSize) return false;
+
+            return true;
+        }) || null;
     }, [selectedColor, selectedSize, variants]);
+
 
     const stock = matchedVariant?.stock ?? 0;
 
