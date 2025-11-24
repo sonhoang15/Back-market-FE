@@ -191,11 +191,9 @@ export default function CheckoutForm() {
 
             const emailRes = await sendOrderEmail(payload);
             if (emailRes.EC !== 0) {
-                toast.error(emailRes.EM);
-                return;
+                console.warn("Email sending failed but continue:", emailRes.EM);
             }
             const orderRes = await saveOrder(payload);
-            console.log("orderRes:", orderRes);
 
             if (orderRes.EC === 0) {
                 if (!isBuyNow && cartId) {
