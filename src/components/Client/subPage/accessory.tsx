@@ -9,7 +9,6 @@ function Accessory() {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            await new Promise(resolve => setTimeout(resolve, 1200));
 
             try {
                 const data = await getProductsByCategory(3); // category_id = 3

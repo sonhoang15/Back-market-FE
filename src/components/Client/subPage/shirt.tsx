@@ -10,8 +10,6 @@ function Shirt() {
     useEffect(() => {
         const fetchProducts = async () => {
 
-            await new Promise(resolve => setTimeout(resolve, 100000));
-
             try {
                 const data = await getProductsByCategory(1);
                 setProducts(data);
