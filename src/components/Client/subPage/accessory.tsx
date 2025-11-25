@@ -5,12 +5,18 @@ import type { Product } from "../productSection/ProductCard";
 
 function Accessory() {
     const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const data = await getProductsByCategory(3); // category_id = 3
-            setProducts(data);
+            await new Promise(resolve => setTimeout(resolve, 1200));
 
+            try {
+                const data = await getProductsByCategory(3); // category_id = 3
+                setProducts(data);
+            } finally {
+                setLoading(false);
+            }
         };
         fetchProducts();
     }, []);
@@ -125,13 +131,22 @@ function Accessory() {
                 </div>
             </div>
 
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6">
-                {products.map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                ))}
-            </div>
-
+            {loading ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 px-6">
+                    {Array.from({ length: 8 }).map((_, i) => (
+                        <div
+                            key={i}
+                            className="animate-pulse bg-gray-200 h-[500px]"
+                        ></div>
+                    ))}
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6">
+                    {products.map((product) => (
+                        <ProductCard key={product.id} product={product} />
+                    ))}
+                </div>
+            )}
         </>
     );
 }

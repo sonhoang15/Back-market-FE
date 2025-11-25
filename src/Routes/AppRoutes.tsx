@@ -35,15 +35,15 @@ export default function AppRoutes() {
             />
 
             <Route element={<ClientLayout />}>
-                <Route path="/checkout" element={<CheckoutPage />} />
-                <Route path="/accessories" element={<Accessory />} />
-                <Route path="/pants" element={<Pants />} />
-                <Route path="/shirts" element={<Shirts />} />
-                <Route path="/news" element={<News />} />
-                <Route path="/product/:id" element={<ProductDetail />} />
-                <Route path="/profile" element={<PersonalInfoForm />} />
-                <Route path="/search" element={<Search />} />
-                <Route path="/home" element={<Home />} />
+                <Route path="checkout" element={<CheckoutPage />} />
+                <Route path="accessories" element={<Accessory />} />
+                <Route path="pants" element={<Pants />} />
+                <Route path="shirts" element={<Shirts />} />
+                <Route path="news" element={<News />} />
+                <Route path="product/:id" element={<ProductDetail />} />
+                <Route path="profile" element={<PersonalInfoForm />} />
+                <Route path="search" element={<Search />} />
+                <Route path="home" element={<Home />} />
             </Route>
 
 

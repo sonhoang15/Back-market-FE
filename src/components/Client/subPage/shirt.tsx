@@ -3,14 +3,23 @@ import ProductCard from "../productSection/ProductCard";
 import { getProductsByCategory } from "../../../Services/clientSevice";
 import type { Product } from "../productSection/ProductCard";
 
-function Accessory() {
+function Shirt() {
     const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const data = await getProductsByCategory(1);
-            setProducts(data);
+
+            await new Promise(resolve => setTimeout(resolve, 100000));
+
+            try {
+                const data = await getProductsByCategory(1);
+                setProducts(data);
+            } finally {
+                setLoading(false);
+            }
         };
+
         fetchProducts();
     }, []);
 
@@ -125,14 +134,25 @@ function Accessory() {
             </div>
 
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6">
-                {products.map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                ))}
-            </div>
+            {loading ? (
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 px-6">
+                    {Array.from({ length: 8 }).map((_, i) => (
+                        <div
+                            key={i}
+                            className="animate-pulse bg-gray-200 h-[500px]"
+                        ></div>
+                    ))}
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6 mt-10">
+                    {products.map((product) => (
+                        <ProductCard key={product.id} product={product} />
+                    ))}
+                </div>
+            )}
 
         </>
     );
 }
 
-export default Accessory;
+export default Shirt;
