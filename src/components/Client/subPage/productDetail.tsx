@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchVariantsByProduct, getProductById } from "../../../Services/productService";
 import { toast } from "react-toastify";
 import { addToCart } from "../../../Services/cartService";
 import { useProductVariants } from "../useProductVariants";
 import { useNavigate } from "react-router-dom";
+import { recommendProducts } from "../../../Services/clientSevice";
+import { UserContext } from "../../../context/UserContext";
+
 
 export interface Product {
     id: number;
@@ -33,6 +36,9 @@ function ProductDetail() {
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [quantity, setQuantity] = useState(1);
+    const [recommendations, setRecommendations] = useState<any[]>([]);
+    const [loadingRecommend, setLoadingRecommend] = useState(false);
+    const { user } = useContext(UserContext)!;
     const navigate = useNavigate();
 
     const {
@@ -92,6 +98,30 @@ function ProductDetail() {
 
         fetchData();
     }, [id]);
+
+    useEffect(() => {
+        if (!product) return;
+
+        setLoadingRecommend(true);
+
+        const text = [
+            product.name,
+            product.category?.name,
+            product.description,
+        ].filter(Boolean).join(". ");
+
+        recommendProducts({ query: text })
+            .then(res => {
+                setRecommendations(res.data?.DT || []);
+            })
+            .catch(() => {
+                setRecommendations([]);
+            })
+            .finally(() => {
+                setLoadingRecommend(false);
+            });
+
+    }, [product]);
 
     const totalStock = variants.reduce((total, v: any) => total + v.stock, 0);
 
@@ -178,6 +208,10 @@ function ProductDetail() {
                 price: Number(finalPrice),
             }
         });
+    };
+
+    const handleDetail = (productId: number) => {
+        navigate(`/product/${productId}`);
     };
 
     if (loading) {
@@ -354,6 +388,65 @@ function ProductDetail() {
                         </div>
                     )}
                 </div>
+            </div>
+            <div className="mt-20 border-t pt-10">
+                <div className="mb-6">
+                    <h2 className="text-xl font-semibold flex items-center gap-2">
+                        Có thể bạn sẽ thích
+                    </h2>
+                    <p className="text-sm text-gray-500 mt-1">
+                        Các sản phẩm tương tự dựa trên nội dung bạn đang xem
+                    </p>
+                </div>
+
+                {loadingRecommend ? (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        {Array.from({ length: 4 }).map((_, i) => (
+                            <div
+                                key={i}
+                                className="h-[280px] bg-gray-200 animate-pulse"
+                            />
+                        ))}
+                    </div>
+                ) : recommendations.length === 0 ? (
+                    <p className="text-sm text-gray-500">
+                        Chưa có sản phẩm gợi ý phù hợp
+                    </p>
+                ) : (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        {recommendations.map((item) => (
+                            <div
+                                key={item.id}
+                                className="border cursor-pointer group hover:shadow-lg transition"
+                                onClick={() => handleDetail(item.id)}
+                            >
+                                <div className="aspect-square bg-gray-100 overflow-hidden">
+                                    <img
+                                        src={item.image || "/placeholder.png"}
+                                        alt={item.name}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                                    />
+                                </div>
+
+                                <div className="p-3">
+                                    <h3 className="text-sm font-medium line-clamp-2 min-h-[40px]">
+                                        {item.name}
+                                    </h3>
+
+                                    {item.price && (
+                                        <p className="text-sm font-semibold text-red-600 mt-1">
+                                            {Number(item.price).toLocaleString("vi-VN")}₫
+                                        </p>
+                                    )}
+
+                                    <p className="text-xs text-gray-400 mt-1">
+                                        Độ tương đồng: {(item.score * 100).toFixed(0)}%
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </section>
     );

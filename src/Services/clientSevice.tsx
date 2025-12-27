@@ -67,3 +67,9 @@ export const searchProducts = async (keyword: string) => {
         return { EC: 1, DT: [] };
     }
 };
+
+export const recommendProducts = async (
+    payload: { query: string }
+) => {
+    return axios.post("/api/v1/recommend/products", payload);
+};
