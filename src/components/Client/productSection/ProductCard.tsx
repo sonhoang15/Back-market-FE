@@ -193,9 +193,9 @@ export default function ProductCard({ product }: ProductCardProps) {
     return (
         <div className="product-item shadow-lg p-4">
             <div className="product-top mb-4">
-                <Link
-                    to={`/product/${product.id}`}
-                    className="product-thumb block overflow-hidden rounded-lg bg-[#f8f9fc]"
+                <div
+                    onClick={handleDetail}
+                    className="product-thumb cursor-pointer block overflow-hidden rounded-lg bg-[#f8f9fc]"
                 >
                     <div className="w-full h-[500px] flex items-center justify-center">
                         <img
@@ -204,7 +204,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                             className="max-h-full max-w-full object-contain transition-transform duration-300 ease-in-out hover:scale-105"
                         />
                     </div>
-                </Link>
+                </div>
             </div>
 
             {uniqueThumbnails.length > 0 && (
